@@ -6,20 +6,20 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 09:20:11 by olardeux          #+#    #+#             */
-/*   Updated: 2024/08/23 10:31:59 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/08/24 15:39:40 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	word_len(char *line, char sep)
+char	last_char(char *str)
 {
 	int	i;
 
 	i = 0;
-	while (line[i] && line[i] != sep)
+	while (str[i])
 		i++;
-	return (i);
+	return (str[i - 1]);
 }
 
 int	ft_isblank(char c)
@@ -29,18 +29,25 @@ int	ft_isblank(char c)
 	return (0);
 }
 
-int	words_count(char *str, char sep_end)
+int	tokens_count(char **token, char sep_end)
 {
 	int	i;
+	int	inquote;
 	int	count;
 
 	i = 0;
+	inquote = 0;
 	count = 0;
-	while (str[i] != sep_end || str[i])
+	while (token[i] && (!inquote && token[i][0] != sep_end))
 	{
-		if (!ft_isblank(str[i]) && (i == 0 || ft_isblank(str[i - 1])))
-			count++;
+		if (token[i][0] == '"' || last_char(token[i]) == '"')
+			inquote = !inquote;
+		if (!inquote && ft_strncmp(token[i], ">", 2) == 0)
+			i++;
+		if (!inquote && ft_strncmp(token[i], "<", 2) == 0)
+			i++;
+		count++;
 		i++;
 	}
-	return (i);
+	return (count);
 }
