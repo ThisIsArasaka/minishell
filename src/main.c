@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 15:38:02 by olardeux          #+#    #+#             */
-/*   Updated: 2024/08/24 14:17:16 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/08/27 11:14:05 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	main(int argc, char **argv, char **envp)
 		if (line[0] != '\0')
 		{
 			add_history(line);
-			cmd_list = parsing(line);
+			cmd_list = parsing(&line);
 			if (!cmd_list)
 				break ;
 			print_cmd_list(cmd_list);

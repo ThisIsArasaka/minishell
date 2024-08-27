@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 15:37:52 by olardeux          #+#    #+#             */
-/*   Updated: 2024/08/24 15:22:27 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/08/27 11:14:25 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,18 @@ int						ft_isblank(char c);
 int						tokens_count(char **tokens, char sep_end);
 char					last_char(char *str);
 char					*read_file(char *filename);
-t_cmd_list				*parsing(char *line);
+t_cmd_list				*parsing(char **line);
 void					free_cmd_list(t_cmd_list *cmd_list);
 void					free_tokens(char **tokens);
 int						redirect_input(t_cmd_list *cmd, char **tokens,
 							int start, int arg_num);
 int						redirect_output(t_cmd_list *cmd, char **tokens,
 							int start);
-int						inquote_parsing(t_cmd_list *cmd, char **tokens,
-							int start, int arg_num);
+char					**quote_split(char *line);
+int						quote_span(char **token, char sign);
+char					*adjust_line(char *line);
+char					*ft_add_char_pos(char *str, char c, int pos);
+char					*ft_add_char(char *str, char c);
+int						quote_in_token(char *token);
 
 #endif

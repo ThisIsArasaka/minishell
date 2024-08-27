@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 09:20:11 by olardeux          #+#    #+#             */
-/*   Updated: 2024/08/24 15:39:40 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/08/27 08:04:36 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ char	last_char(char *str)
 	int	i;
 
 	i = 0;
+	if (!str)
+		return (0);
 	while (str[i])
 		i++;
 	return (str[i - 1]);
@@ -29,25 +31,63 @@ int	ft_isblank(char c)
 	return (0);
 }
 
-int	tokens_count(char **token, char sep_end)
+char	*ft_add_char_pos(char *str, char c, int pos)
 {
-	int	i;
-	int	inquote;
-	int	count;
+	char	*new;
+	int		i;
+	int		j;
 
 	i = 0;
-	inquote = 0;
-	count = 0;
-	while (token[i] && (!inquote && token[i][0] != sep_end))
+	j = 0;
+	new = malloc(sizeof(char) * (ft_strlen(str) + 2));
+	if (!new)
+		return (NULL);
+	while (str[i])
 	{
-		if (token[i][0] == '"' || last_char(token[i]) == '"')
-			inquote = !inquote;
-		if (!inquote && ft_strncmp(token[i], ">", 2) == 0)
-			i++;
-		if (!inquote && ft_strncmp(token[i], "<", 2) == 0)
-			i++;
-		count++;
+		if (i == pos)
+		{
+			new[j] = c;
+			j++;
+		}
+		new[j] = str[i];
+		i++;
+		j++;
+	}
+	new[j] = 0;
+	free(str);
+	return (new);
+}
+
+char	*ft_add_char(char *str, char c)
+{
+	char	*new;
+	int		i;
+
+	i = 0;
+	new = malloc(sizeof(char) * (ft_strlen(str) + 2));
+	if (!new)
+		return (NULL);
+	while (str[i])
+	{
+		new[i] = str[i];
 		i++;
 	}
-	return (count);
+	new[i] = c;
+	new[i + 1] = 0;
+	free(str);
+	return (new);
+}
+
+int	quote_in_token(char *token)
+{
+	int	i;
+
+	i = 0;
+	while (token[i])
+	{
+		if (token[i] == '"' || token[i] == '\'')
+			return (1);
+		i++;
+	}
+	return (0);
 }
