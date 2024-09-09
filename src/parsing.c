@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 09:13:15 by olardeux          #+#    #+#             */
-/*   Updated: 2024/08/27 11:24:28 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/09/04 13:36:36 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,94 +32,95 @@ int	init_cmd_list(t_cmd_list **cmd_list, char **tokens)
 	return (1);
 }
 
-int	create_cmd(t_cmd_list *cmd, char **tokens, int start, char **quote,
-		int *quote_count)
+int	create_cmd(t_cmd_list *cmd, t_parsing *parsing, int start)
 {
-	int	i;
 	int	j;
 
-	i = 0;
 	j = 0;
-	if (!quote_in_token(tokens[start]))
+	parsing->i = 0;
+	if (!quote_in_token(parsing->tokens[start]))
 	{
-		cmd->cmd = ft_strdup(tokens[start]);
+		cmd->cmd = ft_strdup(parsing->tokens[start]);
 		if (!cmd->cmd)
 			return (0);
 	}
 	else
 	{
-		cmd->cmd = ft_strdup(quote[*quote_count]);
+		cmd->cmd = ft_strdup(parsing->quote[parsing->quote_count]);
 		if (!cmd->cmd)
 			return (0);
-		cmd->args[0] = ft_strdup(quote[*quote_count]);
+		cmd->args[0] = ft_strdup(parsing->quote[parsing->quote_count]);
 		if (!cmd->args[j])
 			return (0);
-		(*quote_count)++;
-		i += quote_span(tokens + i, tokens[start][0]);
+		parsing->quote_count++;
+		parsing->i += quote_span(parsing->tokens + start,
+				parsing->tokens[start][0]);
 		j++;
 	}
-	while (tokens[start + i] && tokens[start + i][0] != '|')
+	while (parsing->tokens[start + parsing->i] && parsing->tokens[start
+		+ parsing->i][0] != '|')
 	{
-		if (tokens[start + i][0] == '<')
+		if (parsing->tokens[start + parsing->i][0] == '<')
 		{
-			if (redirect_input(cmd, tokens, start + i, j))
-				i += 2;
+			if (!redirect_input(cmd, parsing, start + parsing->i, j))
+				return (0);
 			j++;
 		}
-		else if (tokens[start + i][0] == '>')
+		else if (parsing->tokens[start + parsing->i][0] == '>')
 		{
-			if (!redirect_output(cmd, tokens, start + i))
+			if (!redirect_output(cmd, parsing, start + parsing->i))
 				return (0);
-			i += 2;
 		}
-		else if (quote_in_token(tokens[start + i]))
+		else if (quote_in_token(parsing->tokens[start + parsing->i]))
 		{
-			cmd->args[j] = ft_strdup(quote[*quote_count]);
+			cmd->args[j] = ft_strdup(parsing->quote[parsing->quote_count]);
 			if (!cmd->args[j])
 				return (0);
-			(*quote_count)++;
-			i += quote_span(tokens + (start + i), tokens[start + i][0]);
+			parsing->quote_count++;
+			parsing->i += quote_span(parsing->tokens + start + parsing->i,
+					parsing->tokens[start + parsing->i][0]);
 			j++;
 		}
 		else
 		{
-			cmd->args[j] = ft_strdup(tokens[start + i]);
+			cmd->args[j] = ft_strdup(parsing->tokens[start + parsing->i]);
 			if (!cmd->args[j])
 				return (0);
-			i++;
+			parsing->i++;
 			j++;
 		}
+		printf("token[%d] = %s\n", parsing->i, parsing->tokens[start
+			+ parsing->i]);
 	}
 	printf("j = %d\n", j);
 	cmd->args[j] = NULL;
 	return (1);
 }
 
-t_cmd_list	*token_to_command(char **tokens, char **quote)
+t_cmd_list	*token_to_command(t_parsing *parsing)
 {
 	int			i;
-	int			quote_count;
 	int			last;
 	t_cmd_list	*cmd_list;
 	t_cmd_list	*current;
 
 	i = 0;
 	last = 0;
-	quote_count = 0;
-	if (!init_cmd_list(&current, tokens))
+	parsing->quote_count = 0;
+	if (!init_cmd_list(&current, parsing->tokens))
 		return (NULL);
 	cmd_list = current;
-	if (!create_cmd(current, tokens, last, quote, &quote_count))
+	if (!create_cmd(current, parsing, last))
 		return (NULL);
-	while (tokens[i])
+	while (parsing->tokens[i])
 	{
-		if (ft_strncmp(tokens[i], "|", 2) == 0)
+		if (ft_strncmp(parsing->tokens[i], "|", 2) == 0)
 		{
-			if (!init_cmd_list(&current->next, tokens + i + 1))
+			if (!init_cmd_list(&current->next, parsing->tokens + i + 1))
 				return (free_cmd_list(cmd_list), NULL);
 			current = current->next;
 			last = i + 1;
-			if (!create_cmd(current, tokens, last, quote, &quote_count))
+			if (!create_cmd(current, parsing, last))
 				return (free_cmd_list(cmd_list), NULL);
 		}
 		i++;
@@ -129,22 +130,21 @@ t_cmd_list	*token_to_command(char **tokens, char **quote)
 
 t_cmd_list	*parsing(char **line)
 {
-	char		**tokens;
-	char		**quote;
+	t_parsing	parsing;
 	t_cmd_list	*cmd_list;
 
-	quote = quote_split(*line);
+	parsing.quote = quote_split(*line);
 	*line = adjust_line(*line);
 	if (!line)
-		return (free_tokens(quote), NULL);
-	tokens = ft_split(*line, ' ');
-	if (!tokens)
-		return (free_tokens(quote), NULL);
-	cmd_list = token_to_command(tokens, quote);
+		return (free_tokens(parsing.quote), NULL);
+	parsing.tokens = ft_split(*line, ' ');
+	if (!parsing.tokens)
+		return (free_tokens(parsing.quote), NULL);
+	cmd_list = token_to_command(&parsing);
 	if (!cmd_list)
-		return (free_tokens(tokens), NULL);
-	free_tokens(tokens);
-	if (quote)
-		free_tokens(quote);
+		return (free_tokens(parsing.tokens), NULL);
+	free_tokens(parsing.tokens);
+	if (parsing.quote)
+		free_tokens(parsing.quote);
 	return (cmd_list);
 }

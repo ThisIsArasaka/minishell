@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 06:53:32 by olardeux          #+#    #+#             */
-/*   Updated: 2024/08/27 08:25:51 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/09/06 13:23:53 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,4 +62,52 @@ int	tokens_count(char **token, char sep_end)
 		}
 	}
 	return (count);
+}
+
+char	**add_token(char **tokens, char *line, int start, int last)
+{
+	int		i;
+	char	**new;
+
+	i = 0;
+	while (tokens[i])
+		i++;
+	new = (char **)malloc(i + 2 * sizeof(char *));
+	if (!new)
+		return (NULL);
+	i = 0;
+	while (tokens[i])
+	{
+		new[i] = ft_strdup(tokens[i]);
+		if (!new[i])
+		{
+			free_tokens(new);
+			return (NULL);
+		}
+		new[i + 1] = NULL;
+		i++;
+	}
+	while (start != last)
+	{
+		new[i] = ft_add_char(new, line[start]);
+		start++;
+	}
+	new[i + 1] = NULL;
+	return (new);
+}
+
+char	**token_split(char *line)
+{
+	int		i;
+	int		token_start;
+	char	**split;
+
+	i = 0;
+	split = NULL;
+	token_start = 0;
+	while (line[i])
+	{
+		if (ft_isblank(line[i]))
+		token_start = 
+	}
 }

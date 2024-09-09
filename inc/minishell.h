@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 15:37:52 by olardeux          #+#    #+#             */
-/*   Updated: 2024/08/27 11:14:25 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/09/03 08:28:06 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,15 @@
 
 # define PROMPT "minishell\033[0;34m$\033[0m "
 
+typedef struct s_parsing
+{
+	int					i;
+	int					quote_count;
+	int					args_count;
+	char				**quote;
+	char				**tokens;
+}						t_parsing;
+
 typedef struct s_cmd_list
 {
 	char				*cmd;
@@ -47,9 +56,9 @@ char					*read_file(char *filename);
 t_cmd_list				*parsing(char **line);
 void					free_cmd_list(t_cmd_list *cmd_list);
 void					free_tokens(char **tokens);
-int						redirect_input(t_cmd_list *cmd, char **tokens,
+int						redirect_input(t_cmd_list *cmd, t_parsing *parsing,
 							int start, int arg_num);
-int						redirect_output(t_cmd_list *cmd, char **tokens,
+int						redirect_output(t_cmd_list *cmd, t_parsing *parsing,
 							int start);
 char					**quote_split(char *line);
 int						quote_span(char **token, char sign);

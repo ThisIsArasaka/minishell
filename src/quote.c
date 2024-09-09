@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 13:49:33 by olardeux          #+#    #+#             */
-/*   Updated: 2024/08/27 11:31:58 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/09/04 13:34:39 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,8 @@ int	quote_dup(char *str, char **dup, char sign)
 	}
 	if (quote_counter != 0)
 		return (0);
-	if (str[i] != 0 && str[i] != ' ')
+	if (str[i] != 0 && str[i] != ' ' && str[i] != '<' && str[i] != '>'
+		&& str[i] != '|')
 		i += quote_dup(str + i, dup, sign);
 	return (i);
 }
@@ -108,10 +109,10 @@ char	**quote_split(char *line)
 			if (i != 0 && line[i - 1] != ' ')
 			{
 				sign = line[i];
-				while (i != 0 && (line[i - 1] != ' ' || line[i - 1] == '<'
-						|| line[i - 1] == '>' || line[i - 1] == '|'))
+				while (i != 0 && (line[i - 1] != ' ' && line[i - 1] == '<'
+						&& line[i - 1] == '>' && line[i - 1] == '|'))
 					i--;
-				quote_split[j] = ft_strdup(" ");
+				quote_split[j] = ft_strdup("");
 				i += quote_dup(line + i, &quote_split[j], sign);
 				if (!quote_split[j])
 					return (NULL);
@@ -140,32 +141,67 @@ int	quote_span(char **tokens, char sign)
 
 	i = 0;
 	j = 0;
-	quote_count = 0;
-	while (tokens[i])
+	while (tokens[i][j] && tokens[i][j] != sign)
+		j++;
+	while (tokens[i][j] && tokens[i][j] == sign)
+	{
+		quote_count++;
+		j++;
+	}
+	while (tokens[i][j] && quote_count > 0)
 	{
 		j = 0;
-		while (tokens[i][j] == sign)
+		while (tokens[i][j])
 		{
-			quote_count++;
-			j++;
-		}
-		if (tokens[i][j] != 0)
-			break ;
-		i++;
-	}
-	while (tokens[i] && quote_count)
-	{
-		if (quote_in_token(tokens[i]))
-		{
-			j = 0;
-			while (tokens[i][j] == sign)
+			if (tokens[i][j] == sign)
 			{
 				quote_count--;
 				j++;
 			}
+			else
+				j++;
 		}
 		i++;
 	}
-	printf("span = %d\n", i);
 	return (i);
 }
+
+// int	quote_span(char **tokens, char sign)
+// {
+// 	int	i;
+// 	int	j;
+// 	int	quote_count;
+
+// 	i = 0;
+// 	j = 0;
+// 	quote_count = 0;
+// 	while (tokens[i])
+// 	{
+// 		j = 0;
+// 		while (tokens[i][j] != sign && tokens[i][j] != 0)
+// 			j++;
+// 		while (tokens[i][j] == sign)
+// 		{
+// 			quote_count++;
+// 			j++;
+// 		}
+// 		if (tokens[i][j] != 0)
+// 			break ;
+// 		i++;
+// 	}
+// 	while (tokens[i] && quote_count)
+// 	{
+// 		if (quote_in_token(tokens[i]))
+// 		{
+// 			j = 0;
+// 			while (tokens[i][j] == sign)
+// 			{
+// 				quote_count--;
+// 				j++;
+// 			}
+// 		}
+// 		i++;
+// 	}
+// 	printf("span = %d\n", i);
+// 	return (i);
+// }

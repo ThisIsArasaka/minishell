@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 09:20:11 by olardeux          #+#    #+#             */
-/*   Updated: 2024/08/27 08:04:36 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/09/06 13:08:56 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,16 @@ char	*ft_add_char(char *str, char c)
 	int		i;
 
 	i = 0;
-	new = malloc(sizeof(char) * (ft_strlen(str) + 2));
+	if (str == NULL)
+	{
+		new = (char *)malloc(2);
+		if (!new)
+			return (NULL);
+		new[0] = c;
+		new[1] = NULL;
+		return (free(str), new);
+	}
+	new = (char *)malloc(sizeof(char) * (ft_strlen(str) + 2));
 	if (!new)
 		return (NULL);
 	while (str[i])
