@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 15:37:52 by olardeux          #+#    #+#             */
-/*   Updated: 2024/09/03 08:28:06 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/09/10 11:48:06 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,9 @@ int						redirect_input(t_cmd_list *cmd, t_parsing *parsing,
 							int start, int arg_num);
 int						redirect_output(t_cmd_list *cmd, t_parsing *parsing,
 							int start);
-char					**quote_split(char *line);
-int						quote_span(char **token, char sign);
 char					*adjust_line(char *line);
 char					*ft_add_char_pos(char *str, char c, int pos);
 char					*ft_add_char(char *str, char c);
-int						quote_in_token(char *token);
+char					**token_split(char *line);
 
 #endif

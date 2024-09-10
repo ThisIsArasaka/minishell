@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 09:13:15 by olardeux          #+#    #+#             */
-/*   Updated: 2024/09/04 13:36:36 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/09/10 11:57:54 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,25 +38,9 @@ int	create_cmd(t_cmd_list *cmd, t_parsing *parsing, int start)
 
 	j = 0;
 	parsing->i = 0;
-	if (!quote_in_token(parsing->tokens[start]))
-	{
-		cmd->cmd = ft_strdup(parsing->tokens[start]);
-		if (!cmd->cmd)
-			return (0);
-	}
-	else
-	{
-		cmd->cmd = ft_strdup(parsing->quote[parsing->quote_count]);
-		if (!cmd->cmd)
-			return (0);
-		cmd->args[0] = ft_strdup(parsing->quote[parsing->quote_count]);
-		if (!cmd->args[j])
-			return (0);
-		parsing->quote_count++;
-		parsing->i += quote_span(parsing->tokens + start,
-				parsing->tokens[start][0]);
-		j++;
-	}
+	cmd->cmd = ft_strdup(parsing->tokens[start]);
+	if (!cmd->cmd)
+		return (0);
 	while (parsing->tokens[start + parsing->i] && parsing->tokens[start
 		+ parsing->i][0] != '|')
 	{
@@ -70,16 +54,6 @@ int	create_cmd(t_cmd_list *cmd, t_parsing *parsing, int start)
 		{
 			if (!redirect_output(cmd, parsing, start + parsing->i))
 				return (0);
-		}
-		else if (quote_in_token(parsing->tokens[start + parsing->i]))
-		{
-			cmd->args[j] = ft_strdup(parsing->quote[parsing->quote_count]);
-			if (!cmd->args[j])
-				return (0);
-			parsing->quote_count++;
-			parsing->i += quote_span(parsing->tokens + start + parsing->i,
-					parsing->tokens[start + parsing->i][0]);
-			j++;
 		}
 		else
 		{
@@ -133,18 +107,17 @@ t_cmd_list	*parsing(char **line)
 	t_parsing	parsing;
 	t_cmd_list	*cmd_list;
 
-	parsing.quote = quote_split(*line);
-	*line = adjust_line(*line);
-	if (!line)
-		return (free_tokens(parsing.quote), NULL);
-	parsing.tokens = ft_split(*line, ' ');
+	// parsing.quote = quote_split(*line);
+	// *line = adjust_line(*line);
+	// if (!line)
+	// 	return (free_tokens(parsing.quote), NULL);
+	parsing.tokens = token_split(*line);
 	if (!parsing.tokens)
-		return (free_tokens(parsing.quote), NULL);
+		return (NULL);
 	cmd_list = token_to_command(&parsing);
 	if (!cmd_list)
 		return (free_tokens(parsing.tokens), NULL);
 	free_tokens(parsing.tokens);
-	if (parsing.quote)
-		free_tokens(parsing.quote);
+	// free_tokens(parsing.quote);
 	return (cmd_list);
 }

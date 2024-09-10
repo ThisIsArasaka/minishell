@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 09:20:11 by olardeux          #+#    #+#             */
-/*   Updated: 2024/09/06 13:08:56 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/09/10 11:58:16 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ char	*ft_add_char(char *str, char c)
 		if (!new)
 			return (NULL);
 		new[0] = c;
-		new[1] = NULL;
+		new[1] = '\0';
 		return (free(str), new);
 	}
 	new = (char *)malloc(sizeof(char) * (ft_strlen(str) + 2));

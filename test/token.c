@@ -6,63 +6,64 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 06:53:32 by olardeux          #+#    #+#             */
-/*   Updated: 2024/09/10 12:19:12 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/09/10 11:38:38 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <stdio.h>
 
-char	*adjust_line(char *line)
-{
-	int		i;
-	char	*new;
+// char	*adjust_line(char *line)
+// {
+// 	int		i;
+// 	char	*new;
 
-	i = 0;
-	new = ft_strdup(line);
-	if (!new)
-		return (NULL);
-	while (new[i])
-	{
-		if (new[i] == '<' || new[i] == '>' || new[i] == '|')
-		{
-			if (i > 0 && new[i - 1] != ' ')
-				new = ft_add_char_pos(new, ' ', i++);
-			if (new[i + 1] && new[i + 1] != ' ')
-				new = ft_add_char_pos(new, ' ', i + 1);
-		}
-		i++;
-	}
-	free(line);
-	return (new);
-}
+// 	i = 0;
+// 	new = ft_strdup(line);
+// 	if (!new)
+// 		return (NULL);
+// 	while (new[i])
+// 	{
+// 		if (new[i] == '<' || new[i] == '>' || new[i] == '|')
+// 		{
+// 			if (i > 0 && new[i - 1] != ' ')
+// 				new = ft_add_char_pos(new, ' ', i++);
+// 			if (new[i + 1] && new[i + 1] != ' ')
+// 				new = ft_add_char_pos(new, ' ', i + 1);
+// 		}
+// 		i++;
+// 	}
+// 	free(line);
+// 	return (new);
+// }
 
-int	tokens_count(char **token, char sep_end)
-{
-	int	i;
-	int	count;
+// int	tokens_count(char **token, char sep_end)
+// {
+// 	int	i;
+// 	int	count;
 
-	i = 0;
-	count = 0;
-	while (token[i] && token[i][0] != sep_end)
-	{
-		// if (token[i][0] == '"' || token[i][0] == '\'')
-		// {
-		// 	i += quote_span(token + i, token[i][0]);
-		// 	printf("i = %d\n", i);
-		// 	count++;
-		// }
-		if (token[i][0] == '>')
-			i += 2;
-		else if (token[i][0] == '<')
-			i++;
-		else
-		{
-			count++;
-			i++;
-		}
-	}
-	return (count);
-}
+// 	i = 0;
+// 	count = 0;
+// 	while (token[i] && token[i][0] != sep_end)
+// 	{
+// 		if (token[i][0] == '"' || token[i][0] == '\'')
+// 		{
+// 			i += quote_span(token + i, token[i][0]);
+// 			printf("i = %d\n", i);
+// 			count++;
+// 		}
+// 		else if (token[i][0] == '>')
+// 			i += 2;
+// 		else if (token[i][0] == '<')
+// 			i++;
+// 		else
+// 		{
+// 			count++;
+// 			i++;
+// 		}
+// 	}
+// 	return (count);
+// }
 
 char	**add_quote_token(char **tokens, char *line, int token_count, int *i)
 {
@@ -76,14 +77,11 @@ char	**add_quote_token(char **tokens, char *line, int token_count, int *i)
 	new = malloc(sizeof(char *) * (token_count + 2));
 	if (!new)
 		return (NULL);
-	while (j < token_count)
+	while (tokens[j])
 	{
 		new[j] = ft_strdup(tokens[j]);
-		if (!new[j])
-			return (NULL);
 		j++;
 	}
-	new[token_count] = NULL;
 	j = 0;
 	while (line[j] && ft_isblank(line[j]))
 		j++;
@@ -117,13 +115,12 @@ char	**add_quote_token(char **tokens, char *line, int token_count, int *i)
 			j++;
 		}
 	}
-	*i += j;
+	*i += j - 1;
 	new[token_count + 1] = NULL;
 	if (tokens)
 		free(tokens);
 	return (new);
 }
-
 char	**add_token(char **tokens, char *line, int tokens_count, int token_len)
 {
 	char	**new;
@@ -189,11 +186,9 @@ char	**token_split(char *line)
 		{
 			tokens = add_quote_token(tokens, line + token_start, token_count,
 					&i);
-			printf("i = %d\n", i);
 			token_count++;
 			token_start = i;
 		}
-		printf("line[%d] = %c\n", i, line[i]);
 		i++;
 	}
 	if (i < 0 && !ft_isblank(line[i - 1]) && line[i - 1] != '\'' && line[i
@@ -204,4 +199,17 @@ char	**token_split(char *line)
 		token_count++;
 	}
 	return (tokens);
+}
+
+int	main(void)
+{
+	char	line[] = "ls -l>fichier \"\"\"testaaaaa\"bbb\"cccccc\"'dddddd'eeeeee";
+	char	**tokens;
+
+	tokens = token_split(line);
+	for (int i = 0; tokens[i]; i++)
+	{
+		printf("token[%d] = %s\n", i, tokens[i]);
+	}
+	return (0);
 }
