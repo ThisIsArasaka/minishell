@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 06:53:32 by olardeux          #+#    #+#             */
-/*   Updated: 2024/09/10 12:19:12 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/09/11 00:06:38 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,8 @@ char	**add_quote_token(char **tokens, char *line, int token_count, int *i)
 	j = 0;
 	while (line[j] && ft_isblank(line[j]))
 		j++;
-	while (line[j] && !ft_isblank(line[j]))
+	while (line[j] && !ft_isblank(line[j]) && line[j] != '<' && line[j] != '>'
+		&& line[j] != '|')
 	{
 		if (line[j] == '"' || line[j] == '\'')
 		{
@@ -117,7 +118,7 @@ char	**add_quote_token(char **tokens, char *line, int token_count, int *i)
 			j++;
 		}
 	}
-	*i += j;
+	*i += j - 1;
 	new[token_count + 1] = NULL;
 	if (tokens)
 		free(tokens);
@@ -189,19 +190,21 @@ char	**token_split(char *line)
 		{
 			tokens = add_quote_token(tokens, line + token_start, token_count,
 					&i);
-			printf("i = %d\n", i);
 			token_count++;
 			token_start = i;
 		}
 		printf("line[%d] = %c\n", i, line[i]);
 		i++;
 	}
-	if (i < 0 && !ft_isblank(line[i - 1]) && line[i - 1] != '\'' && line[i
+	printf("i = %d\n", i);
+	if (i > 0 && !ft_isblank(line[i - 1]) && line[i - 1] != '\'' && line[i
 		- 1] != '"')
 	{
 		tokens = add_token(tokens, line + token_start, token_count, i
 				- token_start);
 		token_count++;
 	}
+	for (i = 0; tokens[i]; i++)
+		printf("tokens[%d] = %s\n", i, tokens[i]);
 	return (tokens);
 }
