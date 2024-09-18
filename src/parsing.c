@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 09:13:15 by olardeux          #+#    #+#             */
-/*   Updated: 2024/09/10 11:57:54 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/09/18 11:33:22 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,16 @@ int	create_cmd(t_cmd_list *cmd, t_parsing *parsing, int start)
 		}
 		else if (parsing->tokens[start + parsing->i][0] == '>')
 		{
-			if (!redirect_output(cmd, parsing, start + parsing->i))
-				return (0);
+			if (parsing->tokens[start + parsing->i][1] == '>')
+			{
+				if (!redirect_append(cmd, parsing, start + parsing->i))
+					return (0);
+			}
+			else
+			{
+				if (!redirect_output(cmd, parsing, start + parsing->i))
+					return (0);
+			}
 		}
 		else
 		{
@@ -63,10 +71,7 @@ int	create_cmd(t_cmd_list *cmd, t_parsing *parsing, int start)
 			parsing->i++;
 			j++;
 		}
-		printf("token[%d] = %s\n", parsing->i, parsing->tokens[start
-			+ parsing->i]);
 	}
-	printf("j = %d\n", j);
 	cmd->args[j] = NULL;
 	return (1);
 }
@@ -85,7 +90,7 @@ t_cmd_list	*token_to_command(t_parsing *parsing)
 		return (NULL);
 	cmd_list = current;
 	if (!create_cmd(current, parsing, last))
-		return (NULL);
+		return (free_cmd_list(cmd_list), NULL);
 	while (parsing->tokens[i])
 	{
 		if (ft_strncmp(parsing->tokens[i], "|", 2) == 0)
@@ -107,10 +112,6 @@ t_cmd_list	*parsing(char **line)
 	t_parsing	parsing;
 	t_cmd_list	*cmd_list;
 
-	// parsing.quote = quote_split(*line);
-	// *line = adjust_line(*line);
-	// if (!line)
-	// 	return (free_tokens(parsing.quote), NULL);
 	parsing.tokens = token_split(*line);
 	if (!parsing.tokens)
 		return (NULL);
@@ -118,6 +119,5 @@ t_cmd_list	*parsing(char **line)
 	if (!cmd_list)
 		return (free_tokens(parsing.tokens), NULL);
 	free_tokens(parsing.tokens);
-	// free_tokens(parsing.quote);
 	return (cmd_list);
 }

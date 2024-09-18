@@ -6,23 +6,11 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 09:20:11 by olardeux          #+#    #+#             */
-/*   Updated: 2024/09/10 11:58:16 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/09/17 05:28:31 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-char	last_char(char *str)
-{
-	int	i;
-
-	i = 0;
-	if (!str)
-		return (0);
-	while (str[i])
-		i++;
-	return (str[i - 1]);
-}
 
 int	ft_isblank(char c)
 {

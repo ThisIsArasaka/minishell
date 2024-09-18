@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 14:49:07 by olardeux          #+#    #+#             */
-/*   Updated: 2024/09/10 11:59:39 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/09/17 05:28:39 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,16 @@ int	redirect_output(t_cmd_list *cmd, t_parsing *parsing, int start)
 	cmd->output = ft_strdup(parsing->tokens[start + 1]);
 	if (!cmd->output)
 		return (0);
+	parsing->i += 2;
+	return (1);
+}
+
+int	redirect_append(t_cmd_list *cmd, t_parsing *parsing, int start)
+{
+	cmd->output = ft_strdup(parsing->tokens[start + 1]);
+	if (!cmd->output)
+		return (0);
+	cmd->append = 1;
 	parsing->i += 2;
 	return (1);
 }

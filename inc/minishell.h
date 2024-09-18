@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 15:37:52 by olardeux          #+#    #+#             */
-/*   Updated: 2024/09/10 11:48:06 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/09/17 05:28:33 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ typedef struct s_cmd_list
 
 int						ft_isblank(char c);
 int						tokens_count(char **tokens, char sep_end);
-char					last_char(char *str);
 char					*read_file(char *filename);
 t_cmd_list				*parsing(char **line);
 void					free_cmd_list(t_cmd_list *cmd_list);
@@ -60,9 +59,13 @@ int						redirect_input(t_cmd_list *cmd, t_parsing *parsing,
 							int start, int arg_num);
 int						redirect_output(t_cmd_list *cmd, t_parsing *parsing,
 							int start);
-char					*adjust_line(char *line);
+int						redirect_append(t_cmd_list *cmd, t_parsing *parsing,
+							int start);
 char					*ft_add_char_pos(char *str, char c, int pos);
 char					*ft_add_char(char *str, char c);
 char					**token_split(char *line);
+char					**add_quote_token(char **tokens, char *line,
+							int token_count, int *i);
+char					**token_copy(char **tokens, int token_count);
 
 #endif
