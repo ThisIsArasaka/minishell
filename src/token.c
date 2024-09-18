@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 06:53:32 by olardeux          #+#    #+#             */
-/*   Updated: 2024/09/18 11:58:32 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/09/18 23:53:33 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,20 +121,28 @@ char	**token_split(char *line)
 		}
 		else if (line[i] == '"' || line[i] == '\'')
 		{
+			printf("line[%d] = %c\n", i, line[i]);
 			i = token_start;
 			tokens = add_quote_token(tokens, line + token_start, token_count,
 					&i);
 			token_count++;
 			token_start = i;
 			printf("line[%d] = %c\n", i, line[i]);
+			for (int j = 0; tokens[j]; j++)
+				printf("tokens[%d] = %s\n", j, tokens[j]);
 			if (!line[i])
 				break ;
 		}
 		i++;
 	}
-	if (i > 0 && !ft_isblank(line[i - 1]) && line[i - 1] != '\'' && line[i
-		- 1] != '"')
+	if (i > 0 && !ft_isblank(line[i - 1]))
 	{
+		while (i > 0 && !ft_isblank(line[i - 1]))
+		{
+			if (line[i] == '\'' || line[i] == '"')
+				return (tokens);
+			i--;
+		}
 		tokens = add_token(tokens, line + token_start, token_count, i
 				- token_start);
 		token_count++;
