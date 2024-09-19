@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 15:37:52 by olardeux          #+#    #+#             */
-/*   Updated: 2024/09/19 09:51:41 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/09/19 23:34:53 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int						tokens_count(char **tokens, char sep_end);
 char					*ft_add_char_pos(char *str, char c, int pos);
 int						ft_isblank(char c);
 char					*ft_add_char(char *str, char c);
-int 					is_
+int						is_special_char(char c);
 
 void					free_cmd_list(t_cmd_list *cmd_list);
 void					free_tokens(char **tokens);

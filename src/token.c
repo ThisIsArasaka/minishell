@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 06:53:32 by olardeux          #+#    #+#             */
-/*   Updated: 2024/09/19 09:51:26 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/09/19 23:53:43 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,11 +80,13 @@ char	**add_token(char **tokens, char *line, int tokens_count, int token_len)
 char	**token_split(char *line)
 {
 	int		i;
+	int		j;
 	int		token_start;
 	int		token_count;
 	char	**tokens;
 
 	i = 0;
+	j = 0;
 	tokens = NULL;
 	token_start = 0;
 	token_count = 0;
@@ -132,11 +134,11 @@ char	**token_split(char *line)
 	}
 	if (i > 0 && !ft_isblank(line[i - 1]))
 	{
-		while (i > 0 && !ft_isblank(line[i - 1]))
+		while ((i - j) > 0 && !ft_isblank(line[i - j - 1]))
 		{
-			if (line[i] == '\'' || line[i] == '"')
+			if (line[i - j] == '\'' || line[i] == '"')
 				return (tokens);
-			i--;
+			j--;
 		}
 		tokens = add_token(tokens, line + token_start, token_count, i
 				- token_start);

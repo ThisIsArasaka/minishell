@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 09:13:15 by olardeux          #+#    #+#             */
-/*   Updated: 2024/09/19 03:53:21 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/09/19 23:41:39 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,10 +84,14 @@ t_cmd_list	*token_to_command(t_parsing *parsing)
 
 	i = 0;
 	last = 0;
-	cmd_list = NULL;
+	if (!init_cmd_list(&cmd_list, parsing->tokens))
+		return (NULL);
+	current = cmd_list;
+	if (!create_cmd(current, parsing, last))
+		return (free_cmd_list(cmd_list), NULL);
 	while (parsing->tokens[i])
 	{
-		if (ft_strncmp(parsing->tokens[i], "|", 2) == 0 || i == 0)
+		if (ft_strncmp(parsing->tokens[i], "|", 2) == 0)
 		{
 			if (!init_cmd_list(&current->next, parsing->tokens + i + 1))
 				return (free_cmd_list(cmd_list), NULL);
