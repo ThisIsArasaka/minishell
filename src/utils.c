@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 09:20:11 by olardeux          #+#    #+#             */
-/*   Updated: 2024/09/17 05:28:31 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/09/19 03:19:20 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,16 +75,9 @@ char	*ft_add_char(char *str, char c)
 	return (new);
 }
 
-int	quote_in_token(char *token)
+int	is_special_char(char c)
 {
-	int	i;
-
-	i = 0;
-	while (token[i])
-	{
-		if (token[i] == '"' || token[i] == '\'')
-			return (1);
-		i++;
-	}
+	if (c == '>' || c == '<' || c == '|')
+		return (1);
 	return (0);
 }

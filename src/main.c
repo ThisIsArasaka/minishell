@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 15:38:02 by olardeux          #+#    #+#             */
-/*   Updated: 2024/09/18 23:57:42 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/09/19 03:48:22 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,13 @@ int	main(int argc, char **argv, char **envp)
 {
 	char		*line;
 	t_cmd_list	*cmd_list;
+	t_env		*env;
 
 	(void)argc;
 	(void)argv;
-	(void)envp;
+	env = init_env(envp);
+	if (!env)
+		return (1);
 	rl_initialize();
 	while (1)
 	{
@@ -54,7 +57,7 @@ int	main(int argc, char **argv, char **envp)
 		if (line[0] != '\0')
 		{
 			add_history(line);
-			cmd_list = parsing(&line);
+			cmd_list = parsing(&line, env);
 			if (!cmd_list)
 				break ;
 			print_cmd_list(cmd_list);

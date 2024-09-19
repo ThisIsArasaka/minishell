@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 06:53:32 by olardeux          #+#    #+#             */
-/*   Updated: 2024/09/18 23:53:33 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/09/19 09:51:26 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ int	tokens_count(char **token, char sep_end)
 	count = 0;
 	while (token[i] && token[i][0] != sep_end)
 	{
-		printf("token[%d] = %s\n", i, token[i]);
 		if (token[i][0] == '>')
 			i += 2;
 		else if (token[i][0] == '<')
@@ -106,7 +105,7 @@ char	**token_split(char *line)
 						- token_start);
 				token_count++;
 			}
-			if (line[i + 1] == '>')
+			if (line[i + 1] == '>' || line[i] == '<')
 			{
 				tokens = add_token(tokens, line + i, token_count, 2);
 				i += 2;
@@ -121,15 +120,11 @@ char	**token_split(char *line)
 		}
 		else if (line[i] == '"' || line[i] == '\'')
 		{
-			printf("line[%d] = %c\n", i, line[i]);
 			i = token_start;
 			tokens = add_quote_token(tokens, line + token_start, token_count,
 					&i);
 			token_count++;
 			token_start = i;
-			printf("line[%d] = %c\n", i, line[i]);
-			for (int j = 0; tokens[j]; j++)
-				printf("tokens[%d] = %s\n", j, tokens[j]);
 			if (!line[i])
 				break ;
 		}

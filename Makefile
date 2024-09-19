@@ -6,7 +6,7 @@
 #    By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/01 15:31:23 by olardeux          #+#    #+#              #
-#    Updated: 2024/08/26 10:56:04 by olardeux         ###   ########.fr        #
+#    Updated: 2024/09/19 09:24:19 by olardeux         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = minishell
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g3
 RM = rm -f
-SRC = main.c parsing.c utils.c read_file.c free.c special_char.c quote.c token.c
+SRC = main.c parsing.c utils.c read_file.c free.c special_char.c quote.c token.c env.c check_replace.c
 INC_SRC = minishell.h
 LIBFT = libft/libft.a
 LIBFT_DIR = libft/

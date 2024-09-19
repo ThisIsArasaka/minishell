@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 09:13:15 by olardeux          #+#    #+#             */
-/*   Updated: 2024/09/18 11:33:22 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/09/19 03:53:21 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ int	init_cmd_list(t_cmd_list **cmd_list, char **tokens)
 	int	args_count;
 
 	args_count = tokens_count(tokens, '|');
-	printf("tokens_count = %d\n", args_count);
 	*cmd_list = malloc(sizeof(t_cmd_list));
 	if (!*cmd_list)
 		return (0);
@@ -85,15 +84,10 @@ t_cmd_list	*token_to_command(t_parsing *parsing)
 
 	i = 0;
 	last = 0;
-	parsing->quote_count = 0;
-	if (!init_cmd_list(&current, parsing->tokens))
-		return (NULL);
-	cmd_list = current;
-	if (!create_cmd(current, parsing, last))
-		return (free_cmd_list(cmd_list), NULL);
+	cmd_list = NULL;
 	while (parsing->tokens[i])
 	{
-		if (ft_strncmp(parsing->tokens[i], "|", 2) == 0)
+		if (ft_strncmp(parsing->tokens[i], "|", 2) == 0 || i == 0)
 		{
 			if (!init_cmd_list(&current->next, parsing->tokens + i + 1))
 				return (free_cmd_list(cmd_list), NULL);
@@ -107,11 +101,12 @@ t_cmd_list	*token_to_command(t_parsing *parsing)
 	return (cmd_list);
 }
 
-t_cmd_list	*parsing(char **line)
+t_cmd_list	*parsing(char **line, t_env *env)
 {
 	t_parsing	parsing;
 	t_cmd_list	*cmd_list;
 
+	(void)env;
 	parsing.tokens = token_split(*line);
 	if (!parsing.tokens)
 		return (NULL);

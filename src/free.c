@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 13:48:43 by olardeux          #+#    #+#             */
-/*   Updated: 2024/08/26 12:54:41 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/09/19 03:53:49 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,4 +46,18 @@ void	free_tokens(char **tokens)
 		i++;
 	}
 	free(tokens);
+}
+
+void free_env(t_env *env)
+{
+	t_env	*tmp;
+
+	while (env)
+	{
+		tmp = env;
+		env = env->next;
+		free(tmp->name);
+		free(tmp->value);
+		free(tmp);
+	}
 }
