@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 03:22:11 by olardeux          #+#    #+#             */
-/*   Updated: 2024/09/19 23:39:32 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/09/22 09:12:02 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,22 @@ t_env	*param_env(char *env)
 	if (!new_env->value)
 		return (free(new_env->name), free(new_env), NULL);
 	return (new_env);
+}
+
+char	*get_env_value(t_env *env, char *name)
+{
+	int	i;
+
+	i = 0;
+	while (name[i] && name[i] != '=')
+		i++;
+	while (env)
+	{
+		if (!ft_strncmp(env->name, name, i))
+			return (env->value);
+		env = env->next;
+	}
+	return (NULL);
 }
 
 t_env	*init_env(char **envp)

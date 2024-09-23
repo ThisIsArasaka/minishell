@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 09:23:44 by olardeux          #+#    #+#             */
-/*   Updated: 2024/09/19 23:57:54 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/09/22 09:15:21 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,39 @@ void	skip_quote(char *line, int *i)
 	}
 }
 
+char	*replace_var(char *line, int place, t_env *env)
+{
+	int		i;
+	int		j;
+	char	*new;
+	char	*var;
+
+	i = 0;
+	j = 0;
+	var = get_env_value(env, line + place + 1);
+	if (!var)
+		return (line);
+	new = malloc(sizeof(char) * (ft_strlen(line) + ft_strlen(var)));
+	if (!new)
+		return (line);
+	while (line[i])
+	{
+		if (i == place)
+		{
+			while (var[j])
+			{
+				new[i + j] = var[j];
+				j++;
+			}
+		}
+		new[i + j] = line[i];
+		i++;
+	}
+	new[i + j] = '\0';
+	free(line);
+	return (new);
+}
+
 int	check_replace(char *line, t_env *env)
 {
 	int	i;
@@ -66,6 +99,13 @@ int	check_replace(char *line, t_env *env)
 	{
 		if (line[i] == '\'')
 			skip_quote(line, &i);
+		if (line[i] == '$')
+		{
+			line = replace_var(line, i, env);
+			if (!line)
+				return (0);
+		}
+		i++;
 	}
 	return (1);
 }

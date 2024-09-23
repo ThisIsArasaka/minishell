@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 15:37:52 by olardeux          #+#    #+#             */
-/*   Updated: 2024/09/19 23:34:53 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/09/22 09:12:19 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ char					*read_file(char *filename);
 t_cmd_list				*parsing(char **line, t_env *env);
 
 t_env					*init_env(char **envp);
+char					*get_env_value(t_env *env, char *name);
 
 int						redirect_input(t_cmd_list *cmd, t_parsing *parsing,
 							int start, int arg_num);

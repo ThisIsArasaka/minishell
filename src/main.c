@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 15:38:02 by olardeux          #+#    #+#             */
-/*   Updated: 2024/09/19 03:48:22 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/09/22 09:11:00 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ int	main(int argc, char **argv, char **envp)
 			free_cmd_list(cmd_list);
 		}
 	}
+	free_env(env);
 	rl_clear_history();
 	return (0);
 }
