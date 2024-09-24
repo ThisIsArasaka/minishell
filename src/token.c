@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 06:53:32 by olardeux          #+#    #+#             */
-/*   Updated: 2024/09/19 23:53:43 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/09/24 11:50:58 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ char	**token_split(char *line)
 			token_start = i;
 			token_count++;
 		}
-		else if (line[i] == '>' || line[i] == '<' || line[i] == '|')
+		if (line[i] == '>' || line[i] == '<' || line[i] == '|')
 		{
 			if (i > 0 && !ft_isblank(line[i - 1]))
 			{
@@ -120,7 +120,7 @@ char	**token_split(char *line)
 			token_count++;
 			token_start = i;
 		}
-		else if (line[i] == '"' || line[i] == '\'')
+		if (line[i] == '"' || line[i] == '\'')
 		{
 			i = token_start;
 			tokens = add_quote_token(tokens, line + token_start, token_count,
@@ -136,9 +136,9 @@ char	**token_split(char *line)
 	{
 		while ((i - j) > 0 && !ft_isblank(line[i - j - 1]))
 		{
-			if (line[i - j] == '\'' || line[i] == '"')
+			if (line[i - j] == '\'' || line[i - j] == '"')
 				return (tokens);
-			j--;
+			j++;
 		}
 		tokens = add_token(tokens, line + token_start, token_count, i
 				- token_start);

@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 09:13:15 by olardeux          #+#    #+#             */
-/*   Updated: 2024/09/19 23:41:39 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/09/24 12:34:18 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,9 @@ t_cmd_list	*parsing(char **line, t_env *env)
 	t_parsing	parsing;
 	t_cmd_list	*cmd_list;
 
-	(void)env;
+	*line = check_replace(*line, env);
+	if (!*line)
+		return (NULL);
 	parsing.tokens = token_split(*line);
 	if (!parsing.tokens)
 		return (NULL);
