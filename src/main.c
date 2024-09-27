@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 15:38:02 by olardeux          #+#    #+#             */
-/*   Updated: 2024/09/22 09:11:00 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/09/25 09:26:14 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,11 +58,12 @@ int	main(int argc, char **argv, char **envp)
 		{
 			add_history(line);
 			cmd_list = parsing(&line, env);
-			if (!cmd_list)
-				break ;
-			print_cmd_list(cmd_list);
+			if (cmd_list)
+			{
+				print_cmd_list(cmd_list);
+				free_cmd_list(cmd_list);
+			}
 			free(line);
-			free_cmd_list(cmd_list);
 		}
 	}
 	free_env(env);

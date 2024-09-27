@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 15:37:52 by olardeux          #+#    #+#             */
-/*   Updated: 2024/09/24 12:19:10 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/09/25 10:08:17 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,12 @@
 # include <sys/wait.h>
 # include <unistd.h>
 
+# define MALLOC_ERROR "malloc error"
+# define SYNTAX_ERROR "syntax error"
+# define NO_FILE "No such file or directory"
+# define NO_PERM "Permission denied"
+# define NO_CMD "command not found"
+
 # define FILE_READ_BUFFER_SIZE 1024
 
 # define PROMPT "minishell\033[0;34m$\033[0m "
@@ -36,6 +42,7 @@ typedef struct s_parsing
 	int					i;
 	int					args_count;
 	char				**tokens;
+	struct s_env		*env;
 }						t_parsing;
 
 typedef struct s_env
@@ -60,6 +67,7 @@ t_cmd_list				*parsing(char **line, t_env *env);
 
 t_env					*init_env(char **envp);
 char					*get_env_value(t_env *env, char *name);
+char					*get_env_exec(t_env *env, char *name);
 
 int						redirect_input(t_cmd_list *cmd, t_parsing *parsing,
 							int start, int arg_num);
@@ -83,6 +91,8 @@ int						is_special_char(char c);
 void					free_cmd_list(t_cmd_list *cmd_list);
 void					free_tokens(char **tokens);
 void					free_env(t_env *env);
+
+void					error_msg(char *msg, char *arg);
 
 char					*check_replace(char *line, t_env *env);
 

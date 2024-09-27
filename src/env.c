@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 03:22:11 by olardeux          #+#    #+#             */
-/*   Updated: 2024/09/24 12:27:47 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/09/25 09:28:24 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,32 @@ char	*get_env_value(t_env *env, char *name)
 		tmp = tmp->next;
 	}
 	return (NULL);
+}
+
+char	*get_env_exec(t_env *env, char *name)
+{
+	int		i;
+	char	**path;
+
+	i = 0;
+	if (name[0] == '.' || name[0] == '/')
+		return (ft_strdup(name));
+	path = ft_split(get_env_value(env, "PATH"), ':');
+	if (!path)
+		return (NULL);
+	while (path[i])
+	{
+		path[i] = ft_strjoin(path[i], "/");
+		if (!path[i])
+			return (free_tokens(path), NULL);
+		path[i] = ft_strjoin(path[i], name);
+		if (!path[i])
+			return (free_tokens(path), NULL);
+		if (!access(path[i], F_OK))
+			return (path[i]);
+		i++;
+	}
+	return (free_tokens(path), NULL);
 }
 
 t_env	*init_env(char **envp)

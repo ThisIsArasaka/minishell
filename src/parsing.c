@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 09:13:15 by olardeux          #+#    #+#             */
-/*   Updated: 2024/09/24 12:34:18 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/09/25 10:15:31 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@ int	init_cmd_list(t_cmd_list **cmd_list, char **tokens)
 	args_count = tokens_count(tokens, '|');
 	*cmd_list = malloc(sizeof(t_cmd_list));
 	if (!*cmd_list)
-		return (0);
+		return (error_msg(MALLOC_ERROR, NULL), 0);
 	(*cmd_list)->args = malloc(sizeof(char *) * (args_count + 1));
 	if (!(*cmd_list)->args)
-		return (free((*cmd_list)), 0);
+		return (free((*cmd_list)), error_msg(MALLOC_ERROR, NULL), 0);
 	(*cmd_list)->cmd = NULL;
 	(*cmd_list)->args[0] = NULL;
 	(*cmd_list)->output = NULL;
@@ -37,9 +37,9 @@ int	create_cmd(t_cmd_list *cmd, t_parsing *parsing, int start)
 
 	j = 0;
 	parsing->i = 0;
-	cmd->cmd = ft_strdup(parsing->tokens[start]);
+	cmd->cmd = get_env_exec(parsing->env, parsing->tokens[start]);
 	if (!cmd->cmd)
-		return (0);
+		return (error_msg(NO_CMD, parsing->tokens[0]), 0);
 	while (parsing->tokens[start + parsing->i] && parsing->tokens[start
 		+ parsing->i][0] != '|')
 	{
@@ -66,7 +66,7 @@ int	create_cmd(t_cmd_list *cmd, t_parsing *parsing, int start)
 		{
 			cmd->args[j] = ft_strdup(parsing->tokens[start + parsing->i]);
 			if (!cmd->args[j])
-				return (0);
+				return (error_msg(MALLOC_ERROR, NULL), 0);
 			parsing->i++;
 			j++;
 		}
@@ -110,6 +110,7 @@ t_cmd_list	*parsing(char **line, t_env *env)
 	t_parsing	parsing;
 	t_cmd_list	*cmd_list;
 
+	parsing.env = env;
 	*line = check_replace(*line, env);
 	if (!*line)
 		return (NULL);

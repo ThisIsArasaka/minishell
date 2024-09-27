@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 09:23:44 by olardeux          #+#    #+#             */
-/*   Updated: 2024/09/24 12:50:50 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/09/28 00:05:41 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,38 @@
 
 int	check_quote(char *line)
 {
-	int	i;
-	int	quote_count;
+	int		i;
+	int		quote_count;
+	char	quote;
 
 	i = 0;
 	quote_count = 0;
 	while (line[i])
 	{
 		if (line[i] == '"' || line[i] == '\'')
-			quote_count++;
-		i++;
+		{
+			quote = line[i];
+			while (line[i] && line[i] == quote)
+			{
+				quote_count++;
+				i++;
+			}
+			while (line[i] && quote_count > 0)
+			{
+				if (line[i] == quote)
+				{
+					quote_count--;
+					i++;
+				}
+				else
+					i++;
+			}
+			if (quote_count != 0)
+				return (error_msg(SYNTAX_ERROR, NULL), 0);
+		}
+		else
+			i++;
 	}
-	if (quote_count % 2 != 0)
-		return (0);
 	return (1);
 }
 
@@ -58,18 +77,19 @@ char	*replace_var(char *line, int place, t_env *env)
 {
 	int		i;
 	int		j;
+	int		k;
 	char	*new;
 	char	*var;
 
 	i = 0;
 	j = 0;
+	k = 0;
 	var = get_env_value(env, line + place + 1);
-	printf("var: %s\nvar len: %lu", var, ft_strlen(var));
 	if (!var)
-		return (line);
+		var = "";
 	new = malloc(sizeof(char) * (ft_strlen(line) + ft_strlen(var)));
 	if (!new)
-		return (line);
+		return (error_msg(MALLOC_ERROR, NULL), free(line), NULL);
 	while (line[i])
 	{
 		if (i == place)
@@ -79,11 +99,11 @@ char	*replace_var(char *line, int place, t_env *env)
 				new[i + j] = var[j];
 				j++;
 			}
-			while (line[i] && !ft_isblank(line[i]) && !is_special_char(line[i]))
-				line++;
+			while (line[i + k] && !ft_isblank(line[i + k])
+				&& !is_special_char(line[i + k]))
+				k++;
 		}
-		new[i + j] = line[i];
-		printf("line[%d + %d]: %c\n", i, j, line[i]);
+		new[i + j] = line[i + k];
 		i++;
 	}
 	new[i + j] = '\0';
@@ -96,8 +116,7 @@ char	*check_replace(char *line, t_env *env)
 
 	i = 0;
 	if (!check_quote(line))
-		return (NULL);
-	printf("line: %s\n", line);
+		return (free(line), NULL);
 	while (line[i])
 	{
 		if (line[i] == '\'')
@@ -107,7 +126,6 @@ char	*check_replace(char *line, t_env *env)
 			line = replace_var(line, i, env);
 			if (!line)
 				return (NULL);
-			printf("line: %s\n", line);
 		}
 		i++;
 	}
