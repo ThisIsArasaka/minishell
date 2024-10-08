@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 09:23:44 by olardeux          #+#    #+#             */
-/*   Updated: 2024/09/28 00:05:41 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/10/07 05:33:27 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,19 +71,18 @@ void	skip_quote(char *line, int *i)
 		else
 			(*i)++;
 	}
+	(*i)--;
 }
 
 char	*replace_var(char *line, int place, t_env *env)
 {
 	int		i;
 	int		j;
-	int		k;
 	char	*new;
 	char	*var;
 
 	i = 0;
 	j = 0;
-	k = 0;
 	var = get_env_value(env, line + place + 1);
 	if (!var)
 		var = "";
@@ -94,19 +93,23 @@ char	*replace_var(char *line, int place, t_env *env)
 	{
 		if (i == place)
 		{
-			while (var[j])
+			while (*var)
 			{
-				new[i + j] = var[j];
+				new[j] = *var;
+				var++;
 				j++;
 			}
-			while (line[i + k] && !ft_isblank(line[i + k])
-				&& !is_special_char(line[i + k]))
-				k++;
+			i++;
+			while (line[i] && !ft_isblank(line[i]) && !is_special_char(line[i])
+				&& line[i] != '"' && line[i] != '\\' && line[i] != '$'
+				&& line[i] != '=' && line[i] != '/')
+				i++;
 		}
-		new[i + j] = line[i + k];
+		new[j] = line[i];
 		i++;
+		j++;
 	}
-	new[i + j] = '\0';
+	new[j] = 0;
 	return (free(line), new);
 }
 

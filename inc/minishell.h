@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 15:37:52 by olardeux          #+#    #+#             */
-/*   Updated: 2024/09/25 10:08:17 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/10/07 04:49:05 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ typedef struct s_cmd_list
 	char				*cmd;
 	char				**args;
 	char				*output;
+	char				*input;
 	int					append;
 	struct s_cmd_list	*next;
 }						t_cmd_list;

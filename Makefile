@@ -5,8 +5,8 @@
 #                                                     +:+ +:+         +:+      #
 #    By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/08/01 15:31:23 by olardeux          #+#    #+#              #
-#    Updated: 2024/09/25 09:47:29 by olardeux         ###   ########.fr        #
+#    Created: 2024/10/07 04:08:54 by olardeux          #+#    #+#              #
+#    Updated: 2024/10/07 04:37:39 by olardeux         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,42 +14,40 @@ NAME = minishell
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g3
 RM = rm -f
-SRC = main.c parsing.c utils.c read_file.c free.c special_char.c quote.c token.c env.c check_replace.c error.c
-INC_SRC = minishell.h
+SRC_FILE = check_replace.c error.c main.c quote.c special_char.c utils.c env.c free.c parsing.c read_file.c token.c
+SRC_DIR = src
+SRC = $(addprefix $(SRC_DIR)/, $(SRC_FILE))
+OBJ_DIR = obj
+OBJ = $(addprefix $(OBJ_DIR)/, $(SRC_FILE:.c=.o))
+INC = -I./inc
 LIBFT = libft/libft.a
-LIBFT_DIR = libft/
-SRCDIR = src/
-INCDIR = inc/
-OBJDIR = obj/
-OBJ = $(addprefix $(OBJDIR), $(SRC:.c=.o))
-INC = $(addprefix $(INCDIR), $(INC_SRC))
 
 all: $(NAME)
 
-$(OBJDIR)%.o: $(SRCDIR)%.c $(INC)
-	@mkdir -p $(OBJDIR)
-	@$(CC) $(CFLAGS) -I $(INCDIR) -c $< -o $@
-	@echo "$< Compiled"
-
-$(NAME): $(OBJ) $(LIBFT)
-	@$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(LIBFT) -lreadline
-	@echo "Minishell Compiled"
-
 $(LIBFT):
-	@make -C $(LIBFT_DIR)
+	@make -s -C libft
+	@echo "\033[0;34mLibft compiled!\033[0m"
+
+$(NAME): $(LIBFT) $(OBJ)
+	@$(CC) $(CFLAGS) $(INC) $(OBJ) $(LIBFT) -o $(NAME) -lreadline
+	@echo "\033[0;34mMiniShell compiled!\033[0m"
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	@mkdir -p $(OBJ_DIR)
+	@$(CC) $(CFLAGS) $(INC) -c $< -o $@
+	@echo "\033[0;32mCompilation of \033[0;33m$< \033[0;32mdone.\033[0m"
 
 clean:
-	@$(RM) $(OBJ)
-	@rm -rf $(OBJDIR)
-	@make clean -C $(LIBFT_DIR)
-	@echo "Minishell Object Files Removed"
+	@make -s clean -C libft
+	@$(RM) -r $(OBJ_DIR)
+	@echo "\033[0;31mObjects removed.\033[0m"
 
 fclean: clean
+	@make -s fclean -C libft
 	@$(RM) $(NAME)
-	@make fclean -C $(LIBFT_DIR)
-	@echo "Minishell Removed"
+	@echo "\033[0;31m$(NAME) removed.\033[0m"
 
 re: fclean all
+	@echo "\033[0;34m$(NAME) recompiled!\033[0m"
 
 .PHONY: all clean fclean re
-

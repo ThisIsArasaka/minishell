@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 09:13:15 by olardeux          #+#    #+#             */
-/*   Updated: 2024/09/25 10:15:31 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/10/07 04:42:20 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ int	init_cmd_list(t_cmd_list **cmd_list, char **tokens)
 		return (free((*cmd_list)), error_msg(MALLOC_ERROR, NULL), 0);
 	(*cmd_list)->cmd = NULL;
 	(*cmd_list)->args[0] = NULL;
+	(*cmd_list)->input = NULL;
 	(*cmd_list)->output = NULL;
 	(*cmd_list)->next = NULL;
 	(*cmd_list)->append = 0;
@@ -37,9 +38,33 @@ int	create_cmd(t_cmd_list *cmd, t_parsing *parsing, int start)
 
 	j = 0;
 	parsing->i = 0;
-	cmd->cmd = get_env_exec(parsing->env, parsing->tokens[start]);
-	if (!cmd->cmd)
-		return (error_msg(NO_CMD, parsing->tokens[0]), 0);
+	if (is_special_char(parsing->tokens[start][0]))
+	{
+		if (parsing->tokens[start][0] == '<')
+		{
+			cmd->cmd = get_env_exec(parsing->env, parsing->tokens[start + 2]);
+			if (!cmd->cmd)
+				return (error_msg(NO_CMD, parsing->tokens[0]), 0);
+			cmd->args[j++] = ft_strdup(parsing->tokens[start + 2]);
+			if (!cmd->args[j - 1])
+				return (error_msg(MALLOC_ERROR, NULL), 0);
+			if (!redirect_input(cmd, parsing, start, j++))
+				return (0);
+			parsing->i++;
+		}
+		else
+		{
+			error_msg(SYNTAX_ERROR, NULL);
+			return (0);
+		}
+	}
+	else
+	{
+		cmd->cmd = get_env_exec(parsing->env, parsing->tokens[start
+				+ parsing->i]);
+		if (!cmd->cmd)
+			return (error_msg(NO_CMD, parsing->tokens[0]), 0);
+	}
 	while (parsing->tokens[start + parsing->i] && parsing->tokens[start
 		+ parsing->i][0] != '|')
 	{

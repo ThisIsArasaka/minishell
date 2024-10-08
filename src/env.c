@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 03:22:11 by olardeux          #+#    #+#             */
-/*   Updated: 2024/09/25 09:28:24 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/10/07 05:30:18 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,9 @@ char	*get_env_value(t_env *env, char *name)
 
 	i = 0;
 	tmp = env;
-	while (name[i] && !ft_isblank(name[i]) && !is_special_char(name[i]))
+	while (name[i] && !ft_isblank(name[i]) && !is_special_char(name[i])
+		&& name[i] != '"' && name[i] != '\\' && name[i] != '$' && name[i] != '='
+		&& name[i] != '/')
 		i++;
 	while (tmp)
 	{
@@ -54,6 +56,7 @@ char	*get_env_exec(t_env *env, char *name)
 {
 	int		i;
 	char	**path;
+	char	*cmd;
 
 	i = 0;
 	if (name[0] == '.' || name[0] == '/')
@@ -61,7 +64,7 @@ char	*get_env_exec(t_env *env, char *name)
 	path = ft_split(get_env_value(env, "PATH"), ':');
 	if (!path)
 		return (NULL);
-	while (path[i])
+	while (path[i++])
 	{
 		path[i] = ft_strjoin(path[i], "/");
 		if (!path[i])
@@ -70,8 +73,10 @@ char	*get_env_exec(t_env *env, char *name)
 		if (!path[i])
 			return (free_tokens(path), NULL);
 		if (!access(path[i], F_OK))
-			return (path[i]);
-		i++;
+		{
+			cmd = ft_strdup(path[i]);
+			return (free_tokens(path), cmd);
+		}
 	}
 	return (free_tokens(path), NULL);
 }

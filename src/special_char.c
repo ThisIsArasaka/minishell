@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 14:49:07 by olardeux          #+#    #+#             */
-/*   Updated: 2024/09/27 23:59:05 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/10/07 04:45:02 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,9 @@
 
 int	redirect_input(t_cmd_list *cmd, t_parsing *parsing, int start, int arg_num)
 {
-	cmd->args[arg_num] = read_file(parsing->tokens[start + 1]);
+	if (cmd->input)
+		free(cmd->input);
+	cmd->input = read_file(parsing->tokens[start + 1]);
 	if (!cmd->args[arg_num])
 		return (0);
 	parsing->i += 2;
