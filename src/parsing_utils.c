@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   parsing_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 09:20:11 by olardeux          #+#    #+#             */
-/*   Updated: 2024/10/07 04:57:43 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/10/10 04:19:32 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,33 +17,6 @@ int	ft_isblank(char c)
 	if (c == ' ' || c == '\t')
 		return (1);
 	return (0);
-}
-
-char	*ft_add_char_pos(char *str, char c, int pos)
-{
-	char	*new;
-	int		i;
-	int		j;
-
-	i = 0;
-	j = 0;
-	new = malloc(sizeof(char) * (ft_strlen(str) + 2));
-	if (!new)
-		return (NULL);
-	while (str[i])
-	{
-		if (i == pos)
-		{
-			new[j] = c;
-			j++;
-		}
-		new[j] = str[i];
-		i++;
-		j++;
-	}
-	new[j] = 0;
-	free(str);
-	return (new);
 }
 
 char	*ft_add_char(char *str, char c)

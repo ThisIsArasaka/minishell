@@ -6,7 +6,7 @@
 #    By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/07 04:08:54 by olardeux          #+#    #+#              #
-#    Updated: 2024/10/07 04:37:39 by olardeux         ###   ########.fr        #
+#    Updated: 2024/10/16 06:57:06 by olardeux         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,9 @@ NAME = minishell
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g3
 RM = rm -f
-SRC_FILE = check_replace.c error.c main.c quote.c special_char.c utils.c env.c free.c parsing.c read_file.c token.c
+SRC_FILE = check_replace.c error.c main.c quote.c special_char.c parsing_utils.c \
+			env.c free.c parsing.c read_file.c token.c signals.c builtins.c \
+			ft_echo.c ft_pwd.c ft_exit.c ft_export.c ft_unset.c
 SRC_DIR = src
 SRC = $(addprefix $(SRC_DIR)/, $(SRC_FILE))
 OBJ_DIR = obj

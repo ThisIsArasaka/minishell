@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 09:13:15 by olardeux          #+#    #+#             */
-/*   Updated: 2024/10/07 04:42:20 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/10/14 07:41:40 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	create_cmd(t_cmd_list *cmd, t_parsing *parsing, int start)
 		{
 			cmd->cmd = get_env_exec(parsing->env, parsing->tokens[start + 2]);
 			if (!cmd->cmd)
-				return (error_msg(NO_CMD, parsing->tokens[0]), 0);
+				return (error_msg(MALLOC_ERROR, NULL), 0);
 			cmd->args[j++] = ft_strdup(parsing->tokens[start + 2]);
 			if (!cmd->args[j - 1])
 				return (error_msg(MALLOC_ERROR, NULL), 0);
@@ -63,7 +63,7 @@ int	create_cmd(t_cmd_list *cmd, t_parsing *parsing, int start)
 		cmd->cmd = get_env_exec(parsing->env, parsing->tokens[start
 				+ parsing->i]);
 		if (!cmd->cmd)
-			return (error_msg(NO_CMD, parsing->tokens[0]), 0);
+			return (error_msg(MALLOC_ERROR, NULL), 0);
 	}
 	while (parsing->tokens[start + parsing->i] && parsing->tokens[start
 		+ parsing->i][0] != '|')

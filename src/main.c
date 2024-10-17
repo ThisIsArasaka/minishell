@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 15:38:02 by olardeux          #+#    #+#             */
-/*   Updated: 2024/09/25 09:26:14 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/10/14 09:54:00 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,41 +32,61 @@ void	print_cmd_list(t_cmd_list *cmd_list)
 	}
 }
 
+int	exec(t_data *data)
+{
+	pid_t	pid;
+	int		status;
+	char	**envp;
+
+	if (is_builtin(data->cmd_list))
+		return (builtin(data));
+	envp = env_to_array(data->env);
+	pid = fork();
+	if (pid == 0)
+	{
+		execve(data->cmd_list->cmd, data->cmd_list->args, envp);
+		error_msg(NO_CMD, data->cmd_list->cmd);
+		free_tokens(envp);
+		free_cmd_list(data->cmd_list);
+		free_env(data->env);
+		exit(1);
+	}
+	else
+		waitpid(pid, &status, 0);
+	free_tokens(envp);
+	return (1);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
-	char		*line;
-	t_cmd_list	*cmd_list;
-	t_env		*env;
+	t_data	data;
 
 	(void)argc;
 	(void)argv;
-	env = init_env(envp);
-	if (!env)
+	signal_init();
+	data.env = init_env(envp);
+	if (!data.env)
 		return (1);
 	rl_initialize();
 	while (1)
 	{
-		line = readline(PROMPT);
-		if (!line)
+		data.line = readline(PROMPT);
+		if (!data.line)
 			break ;
-		if (ft_strncmp(line, "exit", 4) == 0)
+		if (data.line[0] != '\0')
 		{
-			free(line);
-			break ;
-		}
-		if (line[0] != '\0')
-		{
-			add_history(line);
-			cmd_list = parsing(&line, env);
-			if (cmd_list)
+			add_history(data.line);
+			data.cmd_list = parsing(&data.line, data.env);
+			if (data.cmd_list)
 			{
-				print_cmd_list(cmd_list);
-				free_cmd_list(cmd_list);
+				print_cmd_list(data.cmd_list);
+				exec(&data);
+				free_cmd_list(data.cmd_list);
 			}
-			free(line);
+			free(data.line);
 		}
 	}
-	free_env(env);
+	free_env(data.env);
 	rl_clear_history();
 	return (0);
 }

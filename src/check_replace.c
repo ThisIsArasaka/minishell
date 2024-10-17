@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 09:23:44 by olardeux          #+#    #+#             */
-/*   Updated: 2024/10/07 05:33:27 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/10/14 07:22:17 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,7 @@ int	check_quote(char *line)
 		if (line[i] == '"' || line[i] == '\'')
 		{
 			quote = line[i];
-			while (line[i] && line[i] == quote)
-			{
-				quote_count++;
-				i++;
-			}
+			quote_count = quote_count_init(line, &i);
 			while (line[i] && quote_count > 0)
 			{
 				if (line[i] == quote)
@@ -40,7 +36,7 @@ int	check_quote(char *line)
 				else
 					i++;
 			}
-			if (quote_count != 0)
+			if (quote_count % 2 != 0)
 				return (error_msg(SYNTAX_ERROR, NULL), 0);
 		}
 		else

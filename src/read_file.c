@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 12:56:17 by olardeux          #+#    #+#             */
-/*   Updated: 2024/09/28 00:06:56 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/10/10 05:04:38 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char	*read_file(char *filename)
 			return (NULL);
 		}
 		buf[readed] = '\0';
-		file = ft_strjoin(file, buf);
+		file = ft_strjoin_free(file, buf);
 	}
 	close(fd);
 	return (file);

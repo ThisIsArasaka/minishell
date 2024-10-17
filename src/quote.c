@@ -6,13 +6,13 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 13:49:33 by olardeux          #+#    #+#             */
-/*   Updated: 2024/09/19 03:16:19 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/10/14 07:41:28 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	in_quote_copy(char **new, char *line, int token_count, int *pos)
+int	quote_count_init(char *line, int *pos)
 {
 	int		quote_count;
 	char	quote;
@@ -24,12 +24,27 @@ int	in_quote_copy(char **new, char *line, int token_count, int *pos)
 		quote_count++;
 		(*pos)++;
 	}
+	if (quote_count % 2 == 0)
+		return (0);
+	return (quote_count);
+}
+
+int	in_quote_copy(char **new, char *line, int token_count, int *pos)
+{
+	int		quote_count;
+	char	quote;
+
+	quote_count = 0;
+	quote = line[*pos];
+	quote_count = quote_count_init(line, pos);
+	if (quote_count == 0)
+		return (new[token_count] = ft_add_char(new[token_count], '\0'), 1);
 	while (line[*pos] && quote_count > 0)
 	{
 		if (line[*pos] == quote)
 		{
-			quote_count--;
 			(*pos)++;
+			break ;
 		}
 		else
 		{
