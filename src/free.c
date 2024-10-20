@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 13:48:43 by olardeux          #+#    #+#             */
-/*   Updated: 2024/09/19 03:53:49 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/10/20 23:44:34 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	free_cmd_list(t_cmd_list *cmd_list)
 
 void	free_tokens(char **tokens)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (tokens[i])
@@ -48,7 +48,7 @@ void	free_tokens(char **tokens)
 	free(tokens);
 }
 
-void free_env(t_env *env)
+void	free_env(t_env *env)
 {
 	t_env	*tmp;
 

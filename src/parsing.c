@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 09:13:15 by olardeux          #+#    #+#             */
-/*   Updated: 2024/10/14 07:41:40 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/10/20 23:41:50 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,8 @@ int	init_cmd_list(t_cmd_list **cmd_list, char **tokens)
 	return (1);
 }
 
-int	create_cmd(t_cmd_list *cmd, t_parsing *parsing, int start)
+int	get_command(t_cmd_list *cmd, t_parsing *parsing, int start)
 {
-	int	j;
-
-	j = 0;
-	parsing->i = 0;
 	if (is_special_char(parsing->tokens[start][0]))
 	{
 		if (parsing->tokens[start][0] == '<')
@@ -45,10 +41,10 @@ int	create_cmd(t_cmd_list *cmd, t_parsing *parsing, int start)
 			cmd->cmd = get_env_exec(parsing->env, parsing->tokens[start + 2]);
 			if (!cmd->cmd)
 				return (error_msg(MALLOC_ERROR, NULL), 0);
-			cmd->args[j++] = ft_strdup(parsing->tokens[start + 2]);
-			if (!cmd->args[j - 1])
+			cmd->args[0] = ft_strdup(parsing->tokens[start + 2]);
+			if (!cmd->args[0])
 				return (error_msg(MALLOC_ERROR, NULL), 0);
-			if (!redirect_input(cmd, parsing, start, j++))
+			if (!redirect_input(cmd, parsing, start, 1))
 				return (0);
 			parsing->i++;
 		}
@@ -65,6 +61,17 @@ int	create_cmd(t_cmd_list *cmd, t_parsing *parsing, int start)
 		if (!cmd->cmd)
 			return (error_msg(MALLOC_ERROR, NULL), 0);
 	}
+	return (1);
+}
+
+int	create_cmd(t_cmd_list *cmd, t_parsing *parsing, int start)
+{
+	int	j;
+
+	j = 0;
+	parsing->i = 0;
+	if (!get_command(cmd, parsing, start))
+		return (0);
 	while (parsing->tokens[start + parsing->i] && parsing->tokens[start
 		+ parsing->i][0] != '|')
 	{
@@ -108,11 +115,10 @@ t_cmd_list	*token_to_command(t_parsing *parsing)
 	t_cmd_list	*current;
 
 	i = 0;
-	last = 0;
 	if (!init_cmd_list(&cmd_list, parsing->tokens))
 		return (NULL);
 	current = cmd_list;
-	if (!create_cmd(current, parsing, last))
+	if (!create_cmd(current, parsing, 0))
 		return (free_cmd_list(cmd_list), NULL);
 	while (parsing->tokens[i])
 	{
