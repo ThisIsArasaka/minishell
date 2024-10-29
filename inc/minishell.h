@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 15:37:52 by olardeux          #+#    #+#             */
-/*   Updated: 2024/10/17 08:50:56 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/10/29 22:18:04 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@
 # define NO_PERM "Permission denied"
 # define NO_CMD "command not found"
 # define ENV_INIT_FAIL "env initialization failed"
+# define HOME_NOT_SET "HOME not set"
+# define CD_ERROR "cd error"
 
 # define FILE_READ_BUFFER_SIZE 1024
 
@@ -118,5 +120,6 @@ int						ft_exit(t_data *data);
 int						ft_export(t_cmd_list *cmd, t_env *env);
 int						ft_unset(t_cmd_list *cmd, t_env *env);
 int						ft_env(t_env *env);
+int						ft_cd(t_cmd_list *cmd, t_env *env);
 
 #endif
