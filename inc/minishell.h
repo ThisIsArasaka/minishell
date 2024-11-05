@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 15:37:52 by olardeux          #+#    #+#             */
-/*   Updated: 2024/10/29 22:18:04 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/05 06:40:27 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,9 @@
 # define HOME_NOT_SET "HOME not set"
 # define CD_ERROR "cd error"
 
-# define FILE_READ_BUFFER_SIZE 1024
+# ifndef FILE_READ_BUFFER_SIZE
+#  define FILE_READ_BUFFER_SIZE 1024
+# endif
 
 # define PROMPT "minishell\033[0;34m$\033[0m "
 
@@ -44,6 +46,8 @@ typedef struct s_parsing
 {
 	int					i;
 	int					args_count;
+	int					token_start;
+	int					token_count;
 	char				**tokens;
 	struct s_env		*env;
 }						t_parsing;
@@ -72,9 +76,17 @@ typedef struct s_data
 	char				*line;
 }						t_data;
 
+// int						g_status;
+
 char					*read_file(char *filename);
 
 t_cmd_list				*parsing(char **line, t_env *env);
+
+int						init_cmd_list(t_cmd_list **cmd_list, char **tokens);
+int						get_command(t_cmd_list *cmd, t_parsing *parsing,
+							int start);
+int						detect_token(t_cmd_list *cmd, t_parsing *parsing,
+							int start, int *j);
 
 t_env					*init_env(char **envp);
 char					*get_env_value(t_env *env, char *name);
@@ -94,6 +106,8 @@ char					**add_quote_token(char **tokens, char *line,
 int						quote_count_init(char *line, int *pos);
 
 char					**token_copy(char **tokens, int token_count);
+char					**add_token(t_parsing *parsing, char *line,
+							int tokens_count, int token_len);
 char					**token_split(char *line);
 int						tokens_count(char **tokens, char sep_end);
 
@@ -113,6 +127,9 @@ void					signal_init(void);
 
 int						is_builtin(t_cmd_list *cmd);
 int						builtin(t_data *data);
+
+void					skip_quote(char *line, int *i);
+int						check_quote(char *line);
 
 int						ft_echo(t_cmd_list *cmd);
 int						ft_pwd(void);

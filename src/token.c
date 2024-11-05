@@ -6,143 +6,115 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 06:53:32 by olardeux          #+#    #+#             */
-/*   Updated: 2024/09/24 11:50:58 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/03 10:39:21 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	tokens_count(char **token, char sep_end)
+int	add_special_char(char *line, t_parsing *parsing)
 {
-	int	i;
-	int	count;
-
-	i = 0;
-	count = 0;
-	while (token[i] && token[i][0] != sep_end)
+	if (parsing->i > 0 && !ft_isblank(line[parsing->i - 1]))
 	{
-		if (token[i][0] == '>')
-			i += 2;
-		else if (token[i][0] == '<')
-			i++;
-		else
+		parsing->tokens = add_token(parsing, line + parsing->token_start,
+				parsing->token_count, parsing->i - parsing->token_start);
+		if (!parsing->tokens)
+			return (0);
+		(parsing->token_count)++;
+	}
+	if (line[parsing->i + 1] == '>' || line[parsing->i] == '<')
+	{
+		parsing->tokens = add_token(parsing, line + parsing->i,
+				parsing->token_count, 2);
+		if (!parsing->tokens)
+			return (0);
+		(parsing->i) += 2;
+	}
+	else
+	{
+		parsing->tokens = add_token(parsing, line + parsing->i,
+				parsing->token_count, 1);
+		if (!parsing->tokens)
+			return (0);
+		(parsing->i)++;
+	}
+	return ((parsing->token_count)++, parsing->token_start = parsing->i, 1);
+}
+
+int	add_quote_char(char *line, t_parsing *parsing)
+{
+	parsing->i = parsing->token_start;
+	parsing->tokens = add_quote_token(parsing->tokens, line
+			+ parsing->token_start, parsing->token_count, &parsing->i);
+	if (!parsing->tokens)
+		return (0);
+	(parsing->token_count)++;
+	parsing->token_start = parsing->i;
+	return (1);
+}
+
+int	last_token(char *line, t_parsing *parsing)
+{
+	int	j;
+
+	j = 0;
+	if (parsing->i > 0 && !ft_isblank(line[parsing->i - 1]))
+	{
+		while ((parsing->i - j) > 0 && !ft_isblank(line[parsing->i - j - 1]))
 		{
-			count++;
-			i++;
+			if (line[parsing->i - j] == '\'' || line[parsing->i - j] == '"')
+				return (1);
+			j++;
 		}
+		parsing->tokens = add_token(parsing, line + parsing->token_start,
+				parsing->token_count, parsing->i - parsing->token_start);
+		if (!parsing->tokens)
+			return (0);
+		(parsing->token_count)++;
 	}
-	return (count);
+	return (1);
 }
 
-char	**token_copy(char **tokens, int token_count)
+int	token_type(t_parsing *parsing, char *line)
 {
-	char	**new;
-	int		i;
-
-	i = 0;
-	new = malloc(sizeof(char *) * (token_count + 2));
-	if (!new)
-		return (NULL);
-	while (i < token_count)
+	if (ft_isblank(line[parsing->i]) && parsing->i > 0
+		&& !ft_isblank(line[parsing->i - 1]))
 	{
-		new[i] = ft_strdup(tokens[i]);
-		if (!new[i])
-			return (free_tokens(new), NULL);
-		i++;
+		parsing->tokens = add_token(parsing, line + parsing->token_start,
+				parsing->token_count, parsing->i - parsing->token_start);
+		parsing->token_start = parsing->i;
+		(parsing->token_count)++;
 	}
-	new[i] = NULL;
-	return (new);
-}
-
-char	**add_token(char **tokens, char *line, int tokens_count, int token_len)
-{
-	char	**new;
-	int		i;
-
-	i = 0;
-	new = token_copy(tokens, tokens_count);
-	if (!new)
-		return (free_tokens(tokens), NULL);
-	while (line[i] && ft_isblank(line[i]))
+	if (line[parsing->i] == '>' || line[parsing->i] == '<'
+		|| line[parsing->i] == '|')
 	{
-		i++;
-		token_len--;
+		if (!add_special_char(line, parsing))
+			return (0);
 	}
-	new[tokens_count] = ft_substr(line, i, token_len);
-	if (!new[tokens_count])
-		return (free_tokens(new), NULL);
-	new[tokens_count + 1] = NULL;
-	if (tokens)
-		free_tokens(tokens);
-	return (new);
+	if (line[parsing->i] == '"' || line[parsing->i] == '\'')
+	{
+		if (!add_quote_char(line, parsing))
+			return (0);
+	}
+	return (1);
 }
 
 char	**token_split(char *line)
 {
-	int		i;
-	int		j;
-	int		token_start;
-	int		token_count;
-	char	**tokens;
+	t_parsing	parsing;
 
-	i = 0;
-	j = 0;
-	tokens = NULL;
-	token_start = 0;
-	token_count = 0;
-	while (line[i])
+	parsing.i = 0;
+	parsing.tokens = NULL;
+	parsing.token_start = 0;
+	parsing.token_count = 0;
+	while (line[parsing.i])
 	{
-		if (ft_isblank(line[i]) && i > 0 && !ft_isblank(line[i - 1]))
-		{
-			tokens = add_token(tokens, line + token_start, token_count, i
-					- token_start);
-			token_start = i;
-			token_count++;
-		}
-		if (line[i] == '>' || line[i] == '<' || line[i] == '|')
-		{
-			if (i > 0 && !ft_isblank(line[i - 1]))
-			{
-				tokens = add_token(tokens, line + token_start, token_count, i
-						- token_start);
-				token_count++;
-			}
-			if (line[i + 1] == '>' || line[i] == '<')
-			{
-				tokens = add_token(tokens, line + i, token_count, 2);
-				i += 2;
-			}
-			else
-			{
-				tokens = add_token(tokens, line + i, token_count, 1);
-				i++;
-			}
-			token_count++;
-			token_start = i;
-		}
-		if (line[i] == '"' || line[i] == '\'')
-		{
-			i = token_start;
-			tokens = add_quote_token(tokens, line + token_start, token_count,
-					&i);
-			token_count++;
-			token_start = i;
-			if (!line[i])
-				break ;
-		}
-		i++;
+		if (!token_type(&parsing, line))
+			return (NULL);
+		if (line[parsing.i])
+			parsing.i++;
 	}
-	if (i > 0 && !ft_isblank(line[i - 1]))
-	{
-		while ((i - j) > 0 && !ft_isblank(line[i - j - 1]))
-		{
-			if (line[i - j] == '\'' || line[i - j] == '"')
-				return (tokens);
-			j++;
-		}
-		tokens = add_token(tokens, line + token_start, token_count, i
-				- token_start);
-		token_count++;
-	}
-	return (tokens);
+	if (!last_token(line, &parsing))
+		return (parsing.tokens);
+	return (parsing.tokens);
 }

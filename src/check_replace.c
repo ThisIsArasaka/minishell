@@ -6,68 +6,48 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 09:23:44 by olardeux          #+#    #+#             */
-/*   Updated: 2024/10/14 07:22:17 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/04 04:18:07 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	check_quote(char *line)
+char	*init_var(char *line, int place, t_env *env)
 {
-	int		i;
-	int		quote_count;
-	char	quote;
+	char	*var;
 
-	i = 0;
-	quote_count = 0;
-	while (line[i])
+	// if (line[place + 1] == '?')
+	// {
+	// 	var = ft_itoa(g_status);
+	// 	if (!var)
+	// 		return (error_msg(MALLOC_ERROR, NULL), free(line), NULL);
+	// }
+	// else
 	{
-		if (line[i] == '"' || line[i] == '\'')
-		{
-			quote = line[i];
-			quote_count = quote_count_init(line, &i);
-			while (line[i] && quote_count > 0)
-			{
-				if (line[i] == quote)
-				{
-					quote_count--;
-					i++;
-				}
-				else
-					i++;
-			}
-			if (quote_count % 2 != 0)
-				return (error_msg(SYNTAX_ERROR, NULL), 0);
-		}
-		else
-			i++;
+		var = get_env_value(env, line + place + 1);
+		if (!var)
+			var = "";
 	}
-	return (1);
+	return (var);
 }
 
-void	skip_quote(char *line, int *i)
+void	add_var(int *i, int *j, char *var, char *new)
 {
-	char	quote;
-	int		quote_count;
+	while (*var)
+	{
+		new[*j] = *var;
+		var++;
+		(*j)++;
+	}
+	(*i)++;
+}
 
-	quote = line[*i];
-	quote_count = 0;
-	while (line[*i] && line[*i] == quote)
-	{
-		quote_count++;
+void	skip_var_name(char *line, int *i)
+{
+	while (line[*i] && !ft_isblank(line[*i]) && !is_special_char(line[*i])
+		&& line[*i] != '"' && line[*i] != '\\' && line[*i] != '$'
+		&& line[*i] != '=' && line[*i] != '/')
 		(*i)++;
-	}
-	while (line[*i] && quote_count > 0)
-	{
-		if (line[*i] == quote)
-		{
-			quote_count--;
-			(*i)++;
-		}
-		else
-			(*i)++;
-	}
-	(*i)--;
 }
 
 char	*replace_var(char *line, int place, t_env *env)
@@ -79,9 +59,7 @@ char	*replace_var(char *line, int place, t_env *env)
 
 	i = 0;
 	j = 0;
-	var = get_env_value(env, line + place + 1);
-	if (!var)
-		var = "";
+	var = init_var(line, place, env);
 	new = malloc(sizeof(char) * (ft_strlen(line) + ft_strlen(var)));
 	if (!new)
 		return (error_msg(MALLOC_ERROR, NULL), free(line), NULL);
@@ -89,17 +67,8 @@ char	*replace_var(char *line, int place, t_env *env)
 	{
 		if (i == place)
 		{
-			while (*var)
-			{
-				new[j] = *var;
-				var++;
-				j++;
-			}
-			i++;
-			while (line[i] && !ft_isblank(line[i]) && !is_special_char(line[i])
-				&& line[i] != '"' && line[i] != '\\' && line[i] != '$'
-				&& line[i] != '=' && line[i] != '/')
-				i++;
+			add_var(&i, &j, var, new);
+			skip_var_name(line, &i);
 		}
 		new[j] = line[i];
 		i++;

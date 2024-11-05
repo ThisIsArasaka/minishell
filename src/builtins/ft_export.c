@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 06:30:13 by olardeux          #+#    #+#             */
-/*   Updated: 2024/10/16 06:46:38 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/10/31 07:16:54 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,34 @@ int	add_env(t_env *env, char *arg)
 	return (1);
 }
 
+void	sort_env(t_env *env)
+{
+	t_env	*tmp;
+	t_env	*tmp2;
+	char	*name;
+	char	*value;
+
+	tmp = env;
+	while (tmp)
+	{
+		tmp2 = tmp->next;
+		while (tmp2)
+		{
+			if (ft_strncmp(tmp->name, tmp2->name, ft_strlen(tmp->name)) > 0)
+			{
+				name = tmp->name;
+				value = tmp->value;
+				tmp->name = tmp2->name;
+				tmp->value = tmp2->value;
+				tmp2->name = name;
+				tmp2->value = value;
+			}
+			tmp2 = tmp2->next;
+		}
+		tmp = tmp->next;
+	}
+}
+
 int	ft_export(t_cmd_list *cmd, t_env *env)
 {
 	int	i;
@@ -87,5 +115,6 @@ int	ft_export(t_cmd_list *cmd, t_env *env)
 	}
 	if (i == 1)
 		print_env_export(env);
+	sort_env(env);
 	return (1);
 }
