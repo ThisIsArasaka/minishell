@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 06:53:32 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/03 10:39:21 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/08 10:07:58 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,23 +17,21 @@ int	add_special_char(char *line, t_parsing *parsing)
 	if (parsing->i > 0 && !ft_isblank(line[parsing->i - 1]))
 	{
 		parsing->tokens = add_token(parsing, line + parsing->token_start,
-				parsing->token_count, parsing->i - parsing->token_start);
+				parsing->i - parsing->token_start);
 		if (!parsing->tokens)
 			return (0);
 		(parsing->token_count)++;
 	}
-	if (line[parsing->i + 1] == '>' || line[parsing->i] == '<')
+	if (is_special_char(line[parsing->i + 1]))
 	{
-		parsing->tokens = add_token(parsing, line + parsing->i,
-				parsing->token_count, 2);
+		parsing->tokens = add_token(parsing, line + parsing->i, 2);
 		if (!parsing->tokens)
 			return (0);
 		(parsing->i) += 2;
 	}
 	else
 	{
-		parsing->tokens = add_token(parsing, line + parsing->i,
-				parsing->token_count, 1);
+		parsing->tokens = add_token(parsing, line + parsing->i, 1);
 		if (!parsing->tokens)
 			return (0);
 		(parsing->i)++;
@@ -45,7 +43,7 @@ int	add_quote_char(char *line, t_parsing *parsing)
 {
 	parsing->i = parsing->token_start;
 	parsing->tokens = add_quote_token(parsing->tokens, line
-			+ parsing->token_start, parsing->token_count, &parsing->i);
+			+ parsing->token_start, &parsing->i);
 	if (!parsing->tokens)
 		return (0);
 	(parsing->token_count)++;
@@ -67,7 +65,7 @@ int	last_token(char *line, t_parsing *parsing)
 			j++;
 		}
 		parsing->tokens = add_token(parsing, line + parsing->token_start,
-				parsing->token_count, parsing->i - parsing->token_start);
+				parsing->i - parsing->token_start);
 		if (!parsing->tokens)
 			return (0);
 		(parsing->token_count)++;
@@ -81,12 +79,11 @@ int	token_type(t_parsing *parsing, char *line)
 		&& !ft_isblank(line[parsing->i - 1]))
 	{
 		parsing->tokens = add_token(parsing, line + parsing->token_start,
-				parsing->token_count, parsing->i - parsing->token_start);
+				parsing->i - parsing->token_start);
 		parsing->token_start = parsing->i;
 		(parsing->token_count)++;
 	}
-	if (line[parsing->i] == '>' || line[parsing->i] == '<'
-		|| line[parsing->i] == '|')
+	if (is_special_char(line[parsing->i]))
 	{
 		if (!add_special_char(line, parsing))
 			return (0);
@@ -99,7 +96,7 @@ int	token_type(t_parsing *parsing, char *line)
 	return (1);
 }
 
-char	**token_split(char *line)
+t_token	*token_split(char *line)
 {
 	t_parsing	parsing;
 

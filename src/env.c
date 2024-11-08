@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 03:22:11 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/03 10:57:07 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/08 11:13:53 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,15 +73,15 @@ char	*get_env_exec(t_env *env, char *name)
 	{
 		path[i] = ft_strjoin_free(path[i], "/");
 		if (!path[i])
-			return (free_tokens(path), printf("1 %d\n", i), NULL);
+			return (free_tab(path), printf("1 %d\n", i), NULL);
 		path[i] = ft_strjoin_free(path[i], name);
 		if (!path[i])
-			return (free_tokens(path), printf("2 %d\n", i), NULL);
+			return (free_tab(path), printf("2 %d\n", i), NULL);
 		if (!access(path[i], F_OK))
 		{
 			cmd = ft_strdup(path[i]);
-			return (free_tokens(path), cmd);
+			return (free_tab(path), cmd);
 		}
 	}
-	return (free_tokens(path), ft_strdup(name));
+	return (free_tab(path), ft_strdup(name));
 }

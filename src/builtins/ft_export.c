@@ -6,17 +6,46 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 06:30:13 by olardeux          #+#    #+#             */
-/*   Updated: 2024/10/31 07:16:54 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/07 12:12:46 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	sort_env(t_env *env)
+{
+	t_env	*tmp;
+	t_env	*tmp2;
+	char	*name;
+	char	*value;
+
+	tmp = env;
+	while (tmp)
+	{
+		tmp2 = tmp->next;
+		while (tmp2)
+		{
+			if (ft_strncmp(tmp->name, tmp2->name, ft_strlen(tmp->name)) > 0)
+			{
+				name = tmp->name;
+				value = tmp->value;
+				tmp->name = tmp2->name;
+				tmp->value = tmp2->value;
+				tmp2->name = name;
+				tmp2->value = value;
+			}
+			tmp2 = tmp2->next;
+		}
+		tmp = tmp->next;
+	}
+}
 
 void	print_env_export(t_env *env)
 {
 	t_env	*tmp;
 
 	tmp = env;
+	sort_env(env);
 	while (tmp)
 	{
 		printf("export %s=%s\n", tmp->name, tmp->value);
@@ -49,8 +78,7 @@ int	add_env(t_env *env, char *arg)
 	tmp = env;
 	while (tmp->next)
 	{
-		if (!ft_strncmp(tmp->name, new->name, ft_strlen(new->name))
-			&& tmp->value[0])
+		if (name_match(tmp->name, new->name) && tmp->value[0])
 		{
 			free(tmp->value);
 			tmp->value = new->value;
@@ -58,39 +86,12 @@ int	add_env(t_env *env, char *arg)
 			free(new);
 			return (1);
 		}
+		printf("name: %s\n", tmp->name);
 		tmp = tmp->next;
 	}
 	new->next = NULL;
 	tmp->next = new;
 	return (1);
-}
-
-void	sort_env(t_env *env)
-{
-	t_env	*tmp;
-	t_env	*tmp2;
-	char	*name;
-	char	*value;
-
-	tmp = env;
-	while (tmp)
-	{
-		tmp2 = tmp->next;
-		while (tmp2)
-		{
-			if (ft_strncmp(tmp->name, tmp2->name, ft_strlen(tmp->name)) > 0)
-			{
-				name = tmp->name;
-				value = tmp->value;
-				tmp->name = tmp2->name;
-				tmp->value = tmp2->value;
-				tmp2->name = name;
-				tmp2->value = value;
-			}
-			tmp2 = tmp2->next;
-		}
-		tmp = tmp->next;
-	}
 }
 
 int	ft_export(t_cmd_list *cmd, t_env *env)
