@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/03 10:56:33 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/03 10:57:13 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/09 22:19:29 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,10 @@ int	add_to_array(char **array, t_env *env, int i)
 {
 	array[i] = ft_strjoin(env->name, "=");
 	if (!array[i])
-		return (free_tokens(array), 0);
+		return (free_tab(array), 0);
 	array[i] = ft_strjoin_free(array[i], env->value);
 	if (!array[i])
-		return (free_tokens(array), 0);
+		return (free_tab(array), 0);
 	return (1);
 }
 

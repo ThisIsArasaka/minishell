@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 09:23:44 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/04 04:18:07 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/09 22:57:24 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,16 @@ char	*init_var(char *line, int place, t_env *env)
 
 void	add_var(int *i, int *j, char *var, char *new)
 {
+	new[*j] = '\"';
+	(*j)++;
 	while (*var)
 	{
 		new[*j] = *var;
 		var++;
 		(*j)++;
 	}
+	new[*j] = '\"';
+	(*j)++;
 	(*i)++;
 }
 
@@ -60,7 +64,7 @@ char	*replace_var(char *line, int place, t_env *env)
 	i = 0;
 	j = 0;
 	var = init_var(line, place, env);
-	new = malloc(sizeof(char) * (ft_strlen(line) + ft_strlen(var)));
+	new = malloc(sizeof(char) * (ft_strlen(line) + ft_strlen(var) + 2));
 	if (!new)
 		return (error_msg(MALLOC_ERROR, NULL), free(line), NULL);
 	while (line[i])
@@ -89,6 +93,11 @@ char	*check_replace(char *line, t_env *env)
 	{
 		if (line[i] == '\'')
 			skip_quote(line, &i);
+		if (line[i] == '\n')
+		{
+			line[i] = '\0';
+			break ;
+		}
 		if (line[i] == '$' && !ft_isblank(line[i + 1]))
 		{
 			line = replace_var(line, i, env);

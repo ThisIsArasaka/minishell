@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 15:01:02 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/08 11:45:21 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/09 22:28:02 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,13 @@ void	assign_token(t_token *new)
 		new->type = HEREDOC;
 	else if (ft_strncmp(new->token, "|", 2) == 0)
 		new->type = PIPE;
+	else if (ft_strncmp(new->token, "||", 3) == 0 || ft_strncmp(new->token,
+			"&&", 3) == 0 || ft_strncmp(new->token, ";", 2) == 0
+		|| ft_strncmp(new->token, "&", 2) == 0)
+	{
+		error_msg(SYNTAX_ERROR, new->token);
+		new->type = ERROR;
+	}
 	else
 		new->type = WORD;
 }
@@ -94,6 +101,8 @@ t_token	*add_token(t_parsing *parsing, char *line, int token_len)
 		return (free_tokens(new), NULL);
 	new->next = NULL;
 	assign_token(new);
+	if (new->type == ERROR)
+		return (free_tokens(new), NULL);
 	if (!parsing->tokens)
 		return (new);
 	tmp = parsing->tokens;
