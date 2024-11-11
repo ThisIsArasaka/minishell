@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 15:38:02 by olardeux          #+#    #+#             */
-/*   Updated: 2024/10/14 09:54:00 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/08 11:26:20 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,20 +40,21 @@ int	exec(t_data *data)
 
 	if (is_builtin(data->cmd_list))
 		return (builtin(data));
+	data->cmd_list->cmd = get_env_exec(data->env, data->cmd_list->cmd);
 	envp = env_to_array(data->env);
 	pid = fork();
 	if (pid == 0)
 	{
 		execve(data->cmd_list->cmd, data->cmd_list->args, envp);
 		error_msg(NO_CMD, data->cmd_list->cmd);
-		free_tokens(envp);
+		free_tab(envp);
 		free_cmd_list(data->cmd_list);
 		free_env(data->env);
 		exit(1);
 	}
 	else
 		waitpid(pid, &status, 0);
-	free_tokens(envp);
+	free_tab(envp);
 	return (1);
 }
 

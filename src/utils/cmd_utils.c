@@ -6,17 +6,19 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 06:29:34 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/05 07:16:28 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/11 12:04:38 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	init_cmd_list(t_cmd_list **cmd_list, char **tokens)
+int	init_cmd_list(t_cmd_list **cmd_list, t_token *tokens)
 {
 	int	args_count;
 
-	args_count = tokens_count(tokens, '|');
+	args_count = tokens_count(tokens);
+	if (args_count < 0)
+		return (error_msg(SYNTAX_ERROR, NULL), 0);
 	*cmd_list = malloc(sizeof(t_cmd_list));
 	if (!*cmd_list)
 		return (error_msg(MALLOC_ERROR, NULL), 0);
@@ -32,54 +34,57 @@ int	init_cmd_list(t_cmd_list **cmd_list, char **tokens)
 	return (1);
 }
 
-int	get_command(t_cmd_list *cmd, t_parsing *parsing, int start)
+int	get_command(t_cmd_list *cmd, t_parsing *parsing, t_token *start)
 {
-	if (is_special_char(parsing->tokens[start][0])
-		&& (parsing->tokens[start][1] == '\0'
-			|| (is_special_char(parsing->tokens[start][1])
-				&& parsing->tokens[start][2] == '\0')))
+	if (start->type == PIPE)
+		return (error_msg(SYNTAX_ERROR, 0), 0);
+	else if (start->type == INPUT || start->type == OUTPUT
+		|| start->type == APPEND || start->type == HEREDOC)
 	{
-		if (parsing->tokens[start][0] == '>')
+		if (start->token[0] == '>')
 		{
-			if (!redirect_output(cmd, parsing, start))
+			if (!redirect_output(cmd, parsing, &start))
 				return (0);
 		}
-		else if (parsing->tokens[start][0] == '<')
+		else if (start->token[0] == '<')
 		{
-			if (!redirect_input(cmd, parsing, start, 0))
-				return (0);
-		}
-	}
-	cmd->cmd = get_env_exec(parsing->env, parsing->tokens[start + parsing->i]);
-	if (!cmd->cmd)
-		return (error_msg(MALLOC_ERROR, NULL), 0);
-	return (1);
-}
-
-int	detect_token(t_cmd_list *cmd, t_parsing *parsing, int start, int *j)
-{
-	if (is_special_char(parsing->tokens[start + parsing->i][0])
-		&& (parsing->tokens[start + parsing->i][1] == '\0'
-			|| (is_special_char(parsing->tokens[start + parsing->i][1])
-				&& parsing->tokens[start + parsing->i][2] == '\0')))
-	{
-		if (parsing->tokens[start + parsing->i][0] == '>')
-		{
-			if (!redirect_output(cmd, parsing, start + parsing->i))
-				return (0);
-		}
-		else if (parsing->tokens[start + parsing->i][0] == '<')
-		{
-			if (!redirect_input(cmd, parsing, start + parsing->i, *j))
+			if (!redirect_input(cmd, parsing, &start))
 				return (0);
 		}
 	}
 	else
 	{
-		cmd->args[*j] = ft_strdup(parsing->tokens[start + parsing->i]);
+		cmd->cmd = ft_strdup(start->token);
+		if (!cmd->cmd)
+			return (error_msg(MALLOC_ERROR, NULL), 0);
+		parsing->i++;
+	}
+	return (1);
+}
+
+int	detect_token(t_cmd_list *cmd, t_parsing *parsing, t_token **start, int *j)
+{
+	if ((*start)->type == INPUT || (*start)->type == OUTPUT
+		|| (*start)->type == APPEND || (*start)->type == HEREDOC)
+	{
+		if ((*start)->token[0] == '>')
+		{
+			if (!redirect_output(cmd, parsing, start))
+				return (0);
+		}
+		else if ((*start)->token[0] == '<')
+		{
+			if (!redirect_input(cmd, parsing, start))
+				return (0);
+		}
+	}
+	else
+	{
+		cmd->args[*j] = ft_strdup((*start)->token);
 		if (!cmd->args[*j])
 			return (error_msg(MALLOC_ERROR, NULL), 0);
 		parsing->i++;
+		(*start) = (*start)->next;
 		(*j)++;
 	}
 	return (1);

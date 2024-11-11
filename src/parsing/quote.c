@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 13:49:33 by olardeux          #+#    #+#             */
-/*   Updated: 2024/10/14 07:41:28 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/11 12:40:29 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	quote_count_init(char *line, int *pos)
 
 	quote_count = 0;
 	quote = line[*pos];
-	while (line[*pos] && line[*pos] == quote)
+	while (line[*pos] && (line[*pos] == quote))
 	{
 		quote_count++;
 		(*pos)++;
@@ -29,7 +29,7 @@ int	quote_count_init(char *line, int *pos)
 	return (quote_count);
 }
 
-int	in_quote_copy(char **new, char *line, int token_count, int *pos)
+int	in_quote_copy(t_token *new, char *line, int *pos)
 {
 	int		quote_count;
 	char	quote;
@@ -38,7 +38,7 @@ int	in_quote_copy(char **new, char *line, int token_count, int *pos)
 	quote = line[*pos];
 	quote_count = quote_count_init(line, pos);
 	if (quote_count == 0)
-		return (new[token_count] = ft_add_char(new[token_count], '\0'), 1);
+		return (new->token = ft_add_char(new->token, '\0'), 1);
 	while (line[*pos] && quote_count > 0)
 	{
 		if (line[*pos] == quote)
@@ -48,8 +48,8 @@ int	in_quote_copy(char **new, char *line, int token_count, int *pos)
 		}
 		else
 		{
-			new[token_count] = ft_add_char(new[token_count], line[*pos]);
-			if (!new[token_count])
+			new->token = ft_add_char(new->token, line[*pos]);
+			if (!new->token)
 				return (0);
 			(*pos)++;
 		}
@@ -57,43 +57,48 @@ int	in_quote_copy(char **new, char *line, int token_count, int *pos)
 	return (1);
 }
 
-int	add_quote(char **new, char *line, int token_count, int *pos)
+int	add_quote(t_token *new, char *line, int *pos)
 {
 	if (line[*pos] == '"' || line[*pos] == '\'')
 	{
-		if (!in_quote_copy(new, line, token_count, pos))
+		if (!in_quote_copy(new, line, pos))
 			return (0);
 	}
 	else
 	{
-		new[token_count] = ft_add_char(new[token_count], line[*pos]);
-		if (!new[token_count])
+		new->token = ft_add_char(new->token, line[*pos]);
+		if (!new->token)
 			return (0);
 		(*pos)++;
 	}
 	return (1);
 }
 
-char	**add_quote_token(char **tokens, char *line, int token_count, int *i)
+t_token	*add_quote_token(t_token *tokens, char *line, int *i)
 {
-	char	**new;
+	t_token	*new;
+	t_token	*tmp;
 	int		j;
 
 	j = 0;
-	new = token_copy(tokens, token_count);
+	new = add_new_token(tokens);
 	if (!new)
 		return (NULL);
 	while (line[j] && ft_isblank(line[j]))
 		j++;
-	while (line[j] && !ft_isblank(line[j]) && line[j] != '<' && line[j] != '>'
-		&& line[j] != '|')
+	while (line[j] && !ft_isblank(line[j]) && !is_special_char(line[j]))
 	{
-		if (!add_quote(new, line, token_count, &j))
+		if (!add_quote(new, line, &j))
 			return (free_tokens(new), NULL);
 	}
 	*i += j;
-	new[token_count + 1] = NULL;
-	if (tokens)
-		free_tokens(tokens);
-	return (new);
+	new->type = WORD;
+	new->next = NULL;
+	if (!tokens)
+		return (new);
+	tmp = tokens;
+	while (tmp)
+		tmp = tmp->next;
+	tmp = new;
+	return (tokens);
 }
