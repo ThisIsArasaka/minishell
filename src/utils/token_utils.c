@@ -6,11 +6,30 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 15:01:02 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/09 22:28:02 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/11 13:07:50 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	count_special_token(t_token **tokens)
+{
+	if ((*tokens)->type == OUTPUT || (*tokens)->type == APPEND)
+	{
+		if (!(*tokens)->next || (*tokens)->next->type == OUTPUT
+			|| (*tokens)->next->type == APPEND)
+			return (0);
+		*tokens = (*tokens)->next;
+	}
+	else if ((*tokens)->type == INPUT || (*tokens)->type == HEREDOC)
+	{
+		if (!(*tokens)->next || (*tokens)->next->type == INPUT
+			|| (*tokens)->next->type == HEREDOC)
+			return (0);
+		*tokens = (*tokens)->next;
+	}
+	return (1);
+}
 
 int	tokens_count(t_token *token)
 {
@@ -21,20 +40,8 @@ int	tokens_count(t_token *token)
 	count = 0;
 	while (tmp && tmp->type != PIPE)
 	{
-		if (tmp->type == OUTPUT || tmp->type == APPEND)
-		{
-			if (!tmp->next || tmp->next->type == OUTPUT
-				|| tmp->next->type == APPEND)
-				return (error_msg(SYNTAX_ERROR, NULL), -1);
-			tmp = tmp->next;
-		}
-		else if (tmp->type == INPUT || tmp->type == HEREDOC)
-		{
-			if (!tmp->next || tmp->next->type == INPUT
-				|| tmp->next->type == HEREDOC)
-				return (error_msg(SYNTAX_ERROR, NULL), -1);
-			tmp = tmp->next;
-		}
+		if (!count_special_token(&tmp))
+			return (0);
 		else
 		{
 			count++;

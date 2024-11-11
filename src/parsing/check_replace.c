@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 09:23:44 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/09 22:57:24 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/11 12:56:30 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,29 +31,6 @@ char	*init_var(char *line, int place, t_env *env)
 	return (var);
 }
 
-void	add_var(int *i, int *j, char *var, char *new)
-{
-	new[*j] = '\"';
-	(*j)++;
-	while (*var)
-	{
-		new[*j] = *var;
-		var++;
-		(*j)++;
-	}
-	new[*j] = '\"';
-	(*j)++;
-	(*i)++;
-}
-
-void	skip_var_name(char *line, int *i)
-{
-	while (line[*i] && !ft_isblank(line[*i]) && !is_special_char(line[*i])
-		&& line[*i] != '"' && line[*i] != '\\' && line[*i] != '$'
-		&& line[*i] != '=' && line[*i] != '/')
-		(*i)++;
-}
-
 char	*replace_var(char *line, int place, t_env *env)
 {
 	int		i;
@@ -71,7 +48,10 @@ char	*replace_var(char *line, int place, t_env *env)
 	{
 		if (i == place)
 		{
-			add_var(&i, &j, var, new);
+			if (in_quote(line, place))
+				add_var(&i, &j, var, new);
+			else
+				add_var_quoted(&i, &j, var, new);
 			skip_var_name(line, &i);
 		}
 		new[j] = line[i];
@@ -82,7 +62,7 @@ char	*replace_var(char *line, int place, t_env *env)
 	return (free(line), new);
 }
 
-char	*check_replace(char *line, t_env *env)
+char	*check(char *line, t_env *env)
 {
 	int	i;
 
@@ -106,5 +86,6 @@ char	*check_replace(char *line, t_env *env)
 		}
 		i++;
 	}
+	printf("line: %s\n", line);
 	return (line);
 }

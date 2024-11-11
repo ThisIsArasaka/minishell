@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 13:49:33 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/08 11:42:38 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/11 12:40:29 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	quote_count_init(char *line, int *pos)
 
 	quote_count = 0;
 	quote = line[*pos];
-	while (line[*pos] && line[*pos] == quote)
+	while (line[*pos] && (line[*pos] == quote))
 	{
 		quote_count++;
 		(*pos)++;

@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 09:13:15 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/09 00:02:26 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/11 12:53:59 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ t_cmd_list	*parsing(char **line, t_env *env)
 	t_cmd_list	*cmd_list;
 
 	parsing.env = env;
-	*line = check_replace(*line, env);
+	*line = check(*line, env);
 	if (!*line)
 		return (NULL);
 	parsing.tokens = token_split(*line);

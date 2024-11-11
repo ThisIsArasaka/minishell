@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 06:29:34 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/09 00:02:59 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/11 12:04:38 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ int	init_cmd_list(t_cmd_list **cmd_list, t_token *tokens)
 	int	args_count;
 
 	args_count = tokens_count(tokens);
+	if (args_count < 0)
+		return (error_msg(SYNTAX_ERROR, NULL), 0);
 	*cmd_list = malloc(sizeof(t_cmd_list));
 	if (!*cmd_list)
 		return (error_msg(MALLOC_ERROR, NULL), 0);
