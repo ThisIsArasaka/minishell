@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marida-c <marida-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 15:37:52 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/09 22:40:06 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/12 13:59:51 by marida-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,12 @@ typedef struct s_data
 	t_env				*env;
 	char				*line;
 }						t_data;
+
+typedef	struct s_fd
+{
+	int pipes[2];
+	int input;
+} t_fd;
 
 // int						g_status;
 
