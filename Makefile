@@ -3,16 +3,17 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+         #
+#    By: mrn <mrn@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/07 04:08:54 by olardeux          #+#    #+#              #
-#    Updated: 2024/11/11 12:52:49 by olardeux         ###   ########.fr        #
+#    Updated: 2024/11/12 14:20:49 by mrn              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
-CC = cc
-CFLAGS = -Wall -Wextra -Werror -g3
+CC = cc 
+CFLAGS = -Wall -Wextra -Werror -g3 -I/opt/homebrew/opt/readline/include
+LDFLAGS = -L/opt/homebrew/opt/readline/lib -lreadline
 RM = rm -f
 SRC_FILE = main.c read_file.c signals.c 
 BULTINS_FILE = ft_echo.c ft_pwd.c ft_exit.c ft_export.c ft_unset.c ft_env.c \
@@ -47,7 +48,7 @@ $(LIBFT):
 	@echo "\033[0;34mLibft compiled!\033[0m"
 
 $(NAME): $(LIBFT) $(OBJ)
-	@$(CC) $(CFLAGS) $(INC) $(OBJ) $(LIBFT) -o $(NAME) -lreadline
+	@$(CC) $(CFLAGS) $(INC) $(OBJ) $(LIBFT) $(LDFLAGS) -o $(NAME)
 	@echo "\033[0;34mMiniShell compiled!\033[0m"
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c

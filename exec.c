@@ -277,4 +277,3 @@ void exec(t_data *data)
     while (wait(&status) > 0);
 }
 
-ok

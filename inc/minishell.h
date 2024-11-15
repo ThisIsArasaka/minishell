@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marida-c <marida-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mrn <mrn@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 15:37:52 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/12 13:59:51 by marida-c         ###   ########.fr       */
+/*   Updated: 2024/11/12 14:21:55 by mrn              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include <stdio.h>
 # include "../libft/libft.h"
 # include "parsing.h"
 # include <errno.h>
@@ -20,7 +21,6 @@
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
-# include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
 # include <sys/stat.h>
