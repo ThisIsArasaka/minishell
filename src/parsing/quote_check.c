@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/03 11:02:22 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/03 11:03:06 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/16 15:41:32 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	check_quote(char *line)
 	char	quote;
 
 	i = 0;
-	while (line[i])
+	while (line[i] && line[i] != '\n')
 	{
 		if (line[i] == '"' || line[i] == '\'')
 		{
