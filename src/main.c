@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 15:38:02 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/08 11:26:20 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/16 16:19:52 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,20 @@
 void	print_cmd_list(t_cmd_list *cmd_list)
 {
 	t_cmd_list	*tmp;
+	t_redir		*redir;
 	int			i;
 
 	tmp = cmd_list;
 	while (tmp)
 	{
 		printf("cmd: %s\n", tmp->cmd);
-		printf("output: %s\n", tmp->output);
 		i = 0;
+		redir = tmp->redir;
+		while (redir)
+		{
+			printf("type = %d redir: %s\n", redir->type, redir->file);
+			redir = redir->next;
+		}
 		while (tmp->args[i])
 		{
 			printf("args[%d]: %s\n", i, tmp->args[i]);

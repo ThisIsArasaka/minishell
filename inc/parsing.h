@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 22:37:10 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/11 12:53:03 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/16 15:54:48 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 typedef struct s_cmd_list	t_cmd_list;
 typedef struct s_env		t_env;
+typedef struct s_redir		t_redir;
 
 enum						e_token
 {
@@ -52,7 +53,10 @@ int							get_command(t_cmd_list *cmd, t_parsing *parsing,
 								t_token *start);
 int							detect_token(t_cmd_list *cmd, t_parsing *parsing,
 								t_token **start, int *j);
+int							set_redir(t_redir *redir, t_cmd_list *cmd,
+								t_token *start);
 
+t_redir						*init_redir(void);
 int							redirect_input(t_cmd_list *cmd, t_parsing *parsing,
 								t_token **start);
 int							redirect_output(t_cmd_list *cmd, t_parsing *parsing,
