@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 09:23:44 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/16 15:39:46 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/18 06:27:13 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ char	*replace_var(char *line, int place, t_env *env)
 			skip_var_name(line, &i);
 		}
 		new[j] = line[i];
-		i++;
+		if (line[i])
+			i++;
 		j++;
 	}
 	new[j] = 0;

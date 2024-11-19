@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 15:38:02 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/16 16:19:52 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/18 06:40:11 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,6 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	signal_init();
 	data.env = init_env(envp);
-	if (!data.env)
-		return (1);
 	rl_initialize();
 	while (1)
 	{

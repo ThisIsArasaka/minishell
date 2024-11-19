@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 06:53:32 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/11 11:58:25 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/18 10:02:13 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ int	token_check(char *line, t_parsing *parsing)
 		i++;
 	}
 	parsing->tokens = add_token(parsing, line + parsing->i, i - parsing->i);
+	if (!parsing->tokens)
+		return (0);
 	parsing->token_start = i;
 	(parsing->token_count)++;
 	(parsing->i) = i;
@@ -65,7 +67,7 @@ t_token	*token_split(char *line)
 	while (line[parsing.i])
 	{
 		if (!token_type(&parsing, line))
-			return (NULL);
+			return (free_tokens(parsing.tokens), NULL);
 	}
 	if (!last_token(line, &parsing))
 		return (parsing.tokens);

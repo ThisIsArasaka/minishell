@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 03:22:11 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/11 12:57:53 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/18 06:10:51 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ t_env	*param_env(char *env)
 	i = 0;
 	new_env = malloc(sizeof(t_env));
 	if (!new_env || !env)
-		return (error_msg(ENV_INIT_FAIL, NULL), NULL);
+		return (NULL);
 	while (env[i] && env[i] != '=')
 		i++;
 	new_env->name = ft_substr(env, 0, i);
