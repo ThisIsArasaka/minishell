@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 03:22:11 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/11 12:57:53 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/20 10:40:20 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ t_env	*param_env(char *env)
 	i = 0;
 	new_env = malloc(sizeof(t_env));
 	if (!new_env || !env)
-		return (error_msg(ENV_INIT_FAIL, NULL), NULL);
+		return (NULL);
 	while (env[i] && env[i] != '=')
 		i++;
 	new_env->name = ft_substr(env, 0, i);
@@ -65,8 +65,8 @@ char	*get_env_exec(t_env *env, char *name)
 	char	*cmd;
 
 	i = -1;
-	if (name[0] == '.' || name[0] == '/')
-		return (ft_strdup(name));
+	if (name[0] == '.' || name[0] == '/' || name[0] == '\0')
+		return (name);
 	path = ft_split(get_env_value(env, "PATH"), ':');
 	if (!path)
 		return (NULL);
@@ -81,8 +81,8 @@ char	*get_env_exec(t_env *env, char *name)
 		if (!access(path[i], F_OK))
 		{
 			cmd = ft_strdup(path[i]);
-			return (free_tab(path), cmd);
+			return (free_tab(path), free(name), cmd);
 		}
 	}
-	return (free_tab(path), ft_strdup(name));
+	return (free_tab(path), name);
 }

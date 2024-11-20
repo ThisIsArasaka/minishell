@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 13:48:43 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/16 15:59:28 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/20 10:44:21 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ void	free_tokens(t_token *tokens)
 {
 	t_token	*tmp;
 
+	if (!tokens)
+		return ;
 	while (tokens)
 	{
 		tmp = tokens;

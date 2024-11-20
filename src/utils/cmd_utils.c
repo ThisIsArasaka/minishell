@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 06:29:34 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/16 16:05:55 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/20 10:51:49 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,8 @@ int	set_redir(t_redir *redir, t_cmd_list *cmd, t_token *start)
 {
 	t_redir	*tmp;
 
+	if (!redir)
+		return (0);
 	redir->file = ft_strdup(start->next->token);
 	if (!redir->file)
 		return (error_msg(MALLOC_ERROR, NULL), 0);
