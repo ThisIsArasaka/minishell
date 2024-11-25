@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 15:37:52 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/18 06:18:14 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/25 06:13:36 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,11 +73,11 @@ typedef struct s_data
 	char				*line;
 }						t_data;
 
-// int						g_status;
+extern int				g_status;
 
 char					*read_file(char *filename);
 
-//env
+// env
 
 t_env					*init_env(char **envp);
 char					*get_env_value(t_env *env, char *name);

@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 03:22:11 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/20 10:40:20 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/25 06:55:48 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,26 +58,36 @@ char	*get_env_value(t_env *env, char *name)
 	return (NULL);
 }
 
+char	*add_cmd_path(char *path, char *cmd)
+{
+	path = ft_strjoin_free(path, "/");
+	if (!path)
+		return (NULL);
+	path = ft_strjoin_free(path, cmd);
+	if (!path)
+		return (NULL);
+	return (path);
+}
+
 char	*get_env_exec(t_env *env, char *name)
 {
 	int		i;
 	char	**path;
 	char	*cmd;
+	char	*PATH;
 
 	i = -1;
 	if (name[0] == '.' || name[0] == '/' || name[0] == '\0')
 		return (name);
-	path = ft_split(get_env_value(env, "PATH"), ':');
+	PATH = get_env_value(env, "PATH");
+	if (!PATH)
+		return (name);
+	path = ft_split(PATH, ':');
 	if (!path)
 		return (NULL);
 	while (path[++i])
 	{
-		path[i] = ft_strjoin_free(path[i], "/");
-		if (!path[i])
-			return (free_tab(path), NULL);
-		path[i] = ft_strjoin_free(path[i], name);
-		if (!path[i])
-			return (free_tab(path), NULL);
+		path[i] = add_cmd_path(path[i], name);
 		if (!access(path[i], F_OK))
 		{
 			cmd = ft_strdup(path[i]);
