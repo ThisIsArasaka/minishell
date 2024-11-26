@@ -6,30 +6,11 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 15:01:02 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/11 13:07:50 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/20 10:25:26 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	count_special_token(t_token **tokens)
-{
-	if ((*tokens)->type == OUTPUT || (*tokens)->type == APPEND)
-	{
-		if (!(*tokens)->next || (*tokens)->next->type == OUTPUT
-			|| (*tokens)->next->type == APPEND)
-			return (0);
-		*tokens = (*tokens)->next;
-	}
-	else if ((*tokens)->type == INPUT || (*tokens)->type == HEREDOC)
-	{
-		if (!(*tokens)->next || (*tokens)->next->type == INPUT
-			|| (*tokens)->next->type == HEREDOC)
-			return (0);
-		*tokens = (*tokens)->next;
-	}
-	return (1);
-}
 
 int	tokens_count(t_token *token)
 {
@@ -40,8 +21,8 @@ int	tokens_count(t_token *token)
 	count = 0;
 	while (tmp && tmp->type != PIPE)
 	{
-		if (!count_special_token(&tmp))
-			return (0);
+		if (tmp->type != WORD)
+			tmp = tmp->next;
 		else
 		{
 			count++;
@@ -80,8 +61,10 @@ void	assign_token(t_token *new)
 	else if (ft_strncmp(new->token, "|", 2) == 0)
 		new->type = PIPE;
 	else if (ft_strncmp(new->token, "||", 3) == 0 || ft_strncmp(new->token,
-			"&&", 3) == 0 || ft_strncmp(new->token, ";", 2) == 0
-		|| ft_strncmp(new->token, "&", 2) == 0)
+			"<>", 3) == 0 || ft_strncmp(new->token, "><", 3) == 0
+		|| ft_strncmp(new->token, "<|", 3) == 0 || ft_strncmp(new->token, "|<",
+			3) == 0 || ft_strncmp(new->token, "|>", 3) == 0
+		|| ft_strncmp(new->token, ">|", 3) == 0)
 	{
 		error_msg(SYNTAX_ERROR, new->token);
 		new->type = ERROR;
@@ -109,7 +92,7 @@ t_token	*add_token(t_parsing *parsing, char *line, int token_len)
 	new->next = NULL;
 	assign_token(new);
 	if (new->type == ERROR)
-		return (free_tokens(new), NULL);
+		return (free_tokens(parsing->tokens), NULL);
 	if (!parsing->tokens)
 		return (new);
 	tmp = parsing->tokens;

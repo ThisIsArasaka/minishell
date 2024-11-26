@@ -6,11 +6,24 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 13:48:43 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/08 11:21:04 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/20 10:44:21 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	free_redir(t_redir *redir)
+{
+	t_redir	*tmp;
+
+	while (redir)
+	{
+		tmp = redir;
+		redir = redir->next;
+		free(tmp->file);
+		free(tmp);
+	}
+}
 
 void	free_cmd_list(t_cmd_list *cmd_list)
 {
@@ -22,8 +35,9 @@ void	free_cmd_list(t_cmd_list *cmd_list)
 	{
 		tmp = cmd_list;
 		cmd_list = cmd_list->next;
+		if (tmp->redir)
+			free_redir(tmp->redir);
 		free(tmp->cmd);
-		free(tmp->output);
 		while (tmp->args[i])
 		{
 			free(tmp->args[i]);
@@ -39,6 +53,8 @@ void	free_tokens(t_token *tokens)
 {
 	t_token	*tmp;
 
+	if (!tokens)
+		return ;
 	while (tokens)
 	{
 		tmp = tokens;

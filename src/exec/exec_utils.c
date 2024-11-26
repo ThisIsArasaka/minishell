@@ -38,6 +38,7 @@ void	execute_process(t_data *data, t_cmd_list *current_cmd, t_fd *fds)
         {
             builtin(data);
             close_all_fds(fds);
+            printf("execu/ okko\n");
             exit(0);
         }
         else

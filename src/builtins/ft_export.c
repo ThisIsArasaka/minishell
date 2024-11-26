@@ -6,7 +6,7 @@
 /*   By: mrn <mrn@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 06:30:13 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/21 15:36:07 by mrn              ###   ########.fr       */
+/*   Updated: 2024/11/26 14:26:08 by mrn              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ void	print_env_export(t_env *env)
 	t_env	*tmp;
 
 	tmp = env;
-	sort_env(env);
 	while (tmp)
 	{
 		printf("export %s=%s\n", tmp->name, tmp->value);
@@ -67,7 +66,7 @@ int	isvalid(char *str)
 	return (1);
 }
 
-int	add_env(t_env *env, char *arg)
+int	add_env(t_env **env, char *arg)
 {
 	t_env	*new;
 	t_env	*tmp;
@@ -75,8 +74,8 @@ int	add_env(t_env *env, char *arg)
 	new = param_env(arg);
 	if (!new)
 		return (0);
-	tmp = env;
-	while (tmp->next)
+	tmp = *env;
+	while (tmp && tmp->next)
 	{
 		if (name_match(tmp->name, new->name) && tmp->value[0])
 		{
@@ -86,20 +85,22 @@ int	add_env(t_env *env, char *arg)
 			free(new);
 			return (1);
 		}
-		printf("name: %s\n", tmp->name);
 		tmp = tmp->next;
 	}
 	new->next = NULL;
+	if (!*env)
+		return (*env = new, 1);
 	tmp->next = new;
 	return (1);
 }
 
-int	ft_export(t_cmd_list *cmd, t_env *env)
+int	ft_export(t_cmd_list *cmd, t_env **env)
 {
 	printf(PURPLE"executing export...\n"RESET);
 	int	i;
 
 	i = 1;
+	sort_env(*env);
 	while (cmd->args[i])
 	{
 		if (cmd->args[i][0])
@@ -116,7 +117,7 @@ int	ft_export(t_cmd_list *cmd, t_env *env)
 		i++;
 	}
 	if (i == 1)
-		print_env_export(env);
-	sort_env(env);
+		print_env_export(*env);
+	sort_env(*env);
 	return (1);
 }

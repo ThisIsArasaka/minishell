@@ -6,7 +6,7 @@
 /*   By: mrn <mrn@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 15:37:52 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/26 12:05:45 by mrn              ###   ########.fr       */
+/*   Updated: 2024/11/26 14:30:56 by mrn              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,15 +60,26 @@ typedef struct s_env
 	
 }						t_env;
 
+typedef struct s_redir
+{
+	char				*file;
+	int					fd;
+	int					type;
+	struct s_redir		*next;
+}						t_redir;
+
 typedef struct s_cmd_list
 {
 	char				*cmd;
 	char				**args;
+	
 	char				*output;
 	char				*input;
 	int					append;
 	char 				*current_cmd;
 	char 				*cmd_path;
+	
+	struct s_redir		*redir;
 	struct s_cmd_list	*next;
 	
 }						t_cmd_list;
@@ -162,36 +173,51 @@ void print_cmd_list(t_cmd_list *cmd_list);
 
 char					*read_file(char *filename);
 
+//env
+
 t_env					*init_env(char **envp);
 char					*get_env_value(t_env *env, char *name);
 char					*get_env_exec(t_env *env, char *name);
 char					**env_to_array(t_env *env);
 t_env					*param_env(char *env);
 
+// utils
+
 int						ft_isblank(char c);
 char					*ft_add_char(char *str, char c);
 int						is_special_char(char c);
+
+// token
 
 void					free_cmd_list(t_cmd_list *cmd_list);
 void					free_tokens(t_token *tokens);
 void					free_tab(char **tab);
 void					free_env(t_env *env);
+void					free_redir(t_redir *redir);
+
+// error
 
 void					error_msg(char *msg, char *arg);
 
+// signal
+
 void					signal_init(void);
+
+// bultins-launcher
 
 int						is_builtin(t_cmd_list *cmd);
 int						builtin(t_data *data);
 
-int						name_match(char *name, char *arg);
+// builtins
 
 int						ft_echo(t_cmd_list *cmd);
 int						ft_pwd(void);
 int						ft_exit(t_data *data);
-int						ft_export(t_cmd_list *cmd, t_env *env);
+int						ft_export(t_cmd_list *cmd, t_env **env);
 int						ft_unset(t_cmd_list *cmd, t_env *env);
 int						ft_env(t_env *env);
 int						ft_cd(t_cmd_list *cmd, t_env *env);
+
+int						name_match(char *name, char *arg);
 
 #endif

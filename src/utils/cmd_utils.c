@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 06:29:34 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/11 12:04:38 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/20 10:51:49 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,8 @@ int	init_cmd_list(t_cmd_list **cmd_list, t_token *tokens)
 		return (free((*cmd_list)), error_msg(MALLOC_ERROR, NULL), 0);
 	(*cmd_list)->cmd = NULL;
 	(*cmd_list)->args[0] = NULL;
-	(*cmd_list)->input = NULL;
-	(*cmd_list)->output = NULL;
+	(*cmd_list)->redir = NULL;
 	(*cmd_list)->next = NULL;
-	(*cmd_list)->append = 0;
 	return (1);
 }
 
@@ -70,12 +68,12 @@ int	detect_token(t_cmd_list *cmd, t_parsing *parsing, t_token **start, int *j)
 		if ((*start)->token[0] == '>')
 		{
 			if (!redirect_output(cmd, parsing, start))
-				return (0);
+				return (cmd->args[*j] = NULL, 0);
 		}
 		else if ((*start)->token[0] == '<')
 		{
 			if (!redirect_input(cmd, parsing, start))
-				return (0);
+				return (cmd->args[*j] = NULL, 0);
 		}
 	}
 	else
@@ -86,6 +84,35 @@ int	detect_token(t_cmd_list *cmd, t_parsing *parsing, t_token **start, int *j)
 		parsing->i++;
 		(*start) = (*start)->next;
 		(*j)++;
+	}
+	return (1);
+}
+
+int	set_redir(t_redir *redir, t_cmd_list *cmd, t_token *start)
+{
+	t_redir	*tmp;
+
+	if (!redir)
+		return (0);
+	redir->file = ft_strdup(start->next->token);
+	if (!redir->file)
+		return (error_msg(MALLOC_ERROR, NULL), 0);
+	if (start->type == INPUT)
+		redir->type = INPUT;
+	else if (start->type == OUTPUT)
+		redir->type = OUTPUT;
+	else if (start->type == APPEND)
+		redir->type = APPEND;
+	else if (start->type == HEREDOC)
+		redir->type = HEREDOC;
+	if (!cmd->redir)
+		cmd->redir = redir;
+	else
+	{
+		tmp = cmd->redir;
+		while (tmp->next)
+			tmp = tmp->next;
+		tmp->next = redir;
 	}
 	return (1);
 }

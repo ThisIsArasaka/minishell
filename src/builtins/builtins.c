@@ -6,7 +6,7 @@
 /*   By: mrn <mrn@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 08:05:54 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/21 15:36:48 by mrn              ###   ########.fr       */
+/*   Updated: 2024/11/26 14:25:56 by mrn              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	builtin(t_data *data)
 	else if (!ft_strncmp(data->cmd_list->cmd, "env\0", 4))
 		return (ft_env(data->env));
 	else if (!ft_strncmp(data->cmd_list->cmd, "export\0", 7))
-		return (ft_export(data->cmd_list, data->env));
+		return (ft_export(data->cmd_list, &data->env));
 	else if (!ft_strncmp(data->cmd_list->cmd, "unset\0", 6))
 		return (ft_unset(data->cmd_list, data->env));
 	else if (!ft_strncmp(data->cmd_list->cmd, "cd\0", 3))

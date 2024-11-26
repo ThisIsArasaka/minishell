@@ -6,7 +6,7 @@
 /*   By: mrn <mrn@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 15:38:02 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/26 14:09:18 by mrn              ###   ########.fr       */
+/*   Updated: 2024/11/26 14:29:29 by mrn              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,79 +14,103 @@
 
 int		g_sig = 0;
 
-void test_cmd_node(t_cmd_list *node)
+// void test_cmd_node(t_cmd_list *node)
+// {
+//     if (!node)
+//     {
+//         printf("Node is NULL\n");
+//         return;
+//     }
+
+//     printf("Node at address: %p\n", (void *)node);
+
+//     if (node->cmd)
+//         printf("cmd: %s\n", node->cmd);
+//     else
+//         printf("cmd is NULL\n");
+
+//     if (node->output)
+//         printf("output: %s\n", node->output);
+//     else
+//         printf("output is NULL\n");
+
+//     if (node->args)
+//     {
+//         int i = 0;
+//         while (node->args[i])
+//         {
+//             printf("args[%d]: %s\n", i, node->args[i]);
+//             i++;
+//         }
+//     }
+//     else
+//     {
+//         printf("args is NULL\n");
+//     }
+void	print_cmd_list(t_cmd_list *cmd_list)
 {
-    if (!node)
-    {
-        printf("Node is NULL\n");
-        return;
-    }
+	t_cmd_list	*tmp;
+	t_redir		*redir;
+	int			i;
 
-    printf("Node at address: %p\n", (void *)node);
-
-    if (node->cmd)
-        printf("cmd: %s\n", node->cmd);
-    else
-        printf("cmd is NULL\n");
-
-    if (node->output)
-        printf("output: %s\n", node->output);
-    else
-        printf("output is NULL\n");
-
-    if (node->args)
-    {
-        int i = 0;
-        while (node->args[i])
-        {
-            printf("args[%d]: %s\n", i, node->args[i]);
-            i++;
-        }
-    }
-    else
-    {
-        printf("args is NULL\n");
-    }
-}
-
-void print_cmd_list(t_cmd_list *cmd_list)
-{
-    t_cmd_list *tmp;
-    int i;
-
-    tmp = cmd_list;
-    while (tmp)
-    {
-		if (!cmd_list)
-    	{
-        	printf("cmd_list is NULL\n");
-        	return;
-   		}
-    	printf("cmd_list is valid...\n");
-        // Vérifiez que tmp->cmd et tmp->output ne sont pas NULL avant de les afficher
-        if (tmp->cmd != NULL)
+	tmp = cmd_list;
+	while (tmp)
+	{
+		printf("cmd: %s\n", tmp->cmd);
+		i = 0;
+		redir = tmp->redir;
+		while (redir)
 		{
-			printf("ok\n");
-			printf("cmd: %s\n", tmp->cmd);
+			printf("type = %d redir: %s\n", redir->type, redir->file);
+			redir = redir->next;
 		}
-        else
-            printf("cmd: (null)\n");
-        if (tmp->output != NULL)
-            printf("output: %s\n", tmp->output);
-        else
-            printf("output: (null)\n");
-        i = 0;
-        while (tmp->args && tmp->args[i])
-        {
-            if (tmp->args[i] != NULL)
-                printf("args[%d]: %s\n", i, tmp->args[i]);
-            else
-                printf("args[%d]: (null)\n", i);
-            i++;
-        }
-        tmp = tmp->next;
-    }
+		while (tmp->args[i])
+		{
+			printf("args[%d]: %s\n", i, tmp->args[i]);
+			i++;
+		}
+		tmp = tmp->next;
+	}
 }
+
+// void print_cmd_list(t_cmd_list *cmd_list)
+// {
+//     t_cmd_list *tmp;
+//     int i;
+
+//     tmp = cmd_list;
+//     while (tmp)
+//     {
+// 		if (!cmd_list)
+//     	{
+//         	printf("cmd_list is NULL\n");
+//         	return;
+//    		}
+//     	printf("cmd_list is valid...\n");
+//         // Vérifiez que tmp->cmd et tmp->output ne sont pas NULL avant de les afficher
+//         if (tmp->cmd != NULL)
+// 		{
+// 			printf("ok\n");
+// 			printf("cmd: %s\n", tmp->cmd);
+// 		}
+//         else
+//             printf("cmd: (null)\n");
+//         if (tmp->output != NULL)
+//             printf("output: %s\n", tmp->output);
+//         else
+//             printf("output: (null)\n");
+//         i = 0;
+//         while (tmp->args && tmp->args[i])
+//         {
+//             if (tmp->args[i] != NULL)
+//                 printf("args[%d]: %s\n", i, tmp->args[i]);
+//             else
+//                 printf("args[%d]: (null)\n", i);
+//             i++;
+//         }
+//         tmp = tmp->next;
+//     }
+// }
 
 void init_data(t_data *data)
 {
@@ -106,8 +130,6 @@ int	main(int argc, char **argv, char **envp)
 	init_data(&data);
 	signal_init();
 	data.env = init_env(envp);
-	if (!data.env)
-		return (1);
 	rl_initialize();
 	while (1)
 	{
@@ -120,8 +142,8 @@ int	main(int argc, char **argv, char **envp)
 			data.cmd_list = parsing(&data.line, data.env);
 			if (data.cmd_list)
 			{
-				//print_cmd_list(data.cmd_list);
-				test_cmd_node(data.cmd_list);
+				print_cmd_list(data.cmd_list);
+				//test_cmd_node(data.cmd_list);
 				printf("main/ exec\n");
 				exec(&data);
 				free_cmd_list(data.cmd_list);

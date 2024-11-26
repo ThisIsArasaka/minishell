@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-// int	handle_output_redir(t_redir *redir, int fd_out, t_shell *shell)
+// int	handle_output_redir(t_redir *redir, int fd_out, t_data *shell)
 // {
 // 	if (fd_out != -2)
 // 		close(fd_out);
@@ -27,7 +27,7 @@
 // 	return (fd_out);
 // }
 
-// int	handle_input_redir(t_redir *redir, int fd_in, t_shell *shell)
+// int	handle_input_redir(t_redir *redir, int fd_in, t_data *shell)
 // {
 // 	if (fd_in != -2)
 // 		close(fd_in);

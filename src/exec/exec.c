@@ -92,7 +92,7 @@ void exec(t_data *data)
     while (current_cmd) 
     {   
         // Initialiser les redirections et les fds
-        //init_fds_and_redirections(data, current_cmd, &fds);
+        init_fds_and_redirections(current_cmd, &fds);
 
         // Si la commande n'est pas un builtin, exécuter le processus
         if (current_cmd->cmd && current_cmd->cmd[0]) {
@@ -117,7 +117,7 @@ void exec(t_data *data)
     close_all_fds(&fds);
 }
 
-
+///
 // Configuration des pipes (exec -25)
 void setup_pipes(t_fd *fds) 
 {
