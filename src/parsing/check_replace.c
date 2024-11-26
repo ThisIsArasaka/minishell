@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_replace.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mrn <mrn@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 09:23:44 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/11 12:56:30 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/26 14:10:29 by mrn              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,5 @@ char	*check(char *line, t_env *env)
 		}
 		i++;
 	}
-	printf("line: %s\n", line);
 	return (line);
 }

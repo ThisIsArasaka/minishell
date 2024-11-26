@@ -6,7 +6,7 @@
 /*   By: mrn <mrn@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 15:38:02 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/26 13:49:41 by mrn              ###   ########.fr       */
+/*   Updated: 2024/11/26 14:09:18 by mrn              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ int	main(int argc, char **argv, char **envp)
 			data.cmd_list = parsing(&data.line, data.env);
 			if (data.cmd_list)
 			{
-				print_cmd_list(data.cmd_list);
+				//print_cmd_list(data.cmd_list);
 				test_cmd_node(data.cmd_list);
 				printf("main/ exec\n");
 				exec(&data);
