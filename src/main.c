@@ -3,67 +3,107 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mrn <mrn@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 15:38:02 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/08 11:26:20 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/26 13:49:41 by mrn              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	print_cmd_list(t_cmd_list *cmd_list)
-{
-	t_cmd_list	*tmp;
-	int			i;
+int		g_sig = 0;
 
-	tmp = cmd_list;
-	while (tmp)
-	{
-		printf("cmd: %s\n", tmp->cmd);
-		printf("output: %s\n", tmp->output);
-		i = 0;
-		while (tmp->args[i])
-		{
-			printf("args[%d]: %s\n", i, tmp->args[i]);
-			i++;
-		}
-		tmp = tmp->next;
-	}
+void test_cmd_node(t_cmd_list *node)
+{
+    if (!node)
+    {
+        printf("Node is NULL\n");
+        return;
+    }
+
+    printf("Node at address: %p\n", (void *)node);
+
+    if (node->cmd)
+        printf("cmd: %s\n", node->cmd);
+    else
+        printf("cmd is NULL\n");
+
+    if (node->output)
+        printf("output: %s\n", node->output);
+    else
+        printf("output is NULL\n");
+
+    if (node->args)
+    {
+        int i = 0;
+        while (node->args[i])
+        {
+            printf("args[%d]: %s\n", i, node->args[i]);
+            i++;
+        }
+    }
+    else
+    {
+        printf("args is NULL\n");
+    }
 }
 
-int	exec(t_data *data)
+void print_cmd_list(t_cmd_list *cmd_list)
 {
-	pid_t	pid;
-	int		status;
-	char	**envp;
+    t_cmd_list *tmp;
+    int i;
 
-	if (is_builtin(data->cmd_list))
-		return (builtin(data));
-	data->cmd_list->cmd = get_env_exec(data->env, data->cmd_list->cmd);
-	envp = env_to_array(data->env);
-	pid = fork();
-	if (pid == 0)
-	{
-		execve(data->cmd_list->cmd, data->cmd_list->args, envp);
-		error_msg(NO_CMD, data->cmd_list->cmd);
-		free_tab(envp);
-		free_cmd_list(data->cmd_list);
-		free_env(data->env);
-		exit(1);
-	}
-	else
-		waitpid(pid, &status, 0);
-	free_tab(envp);
-	return (1);
+    tmp = cmd_list;
+    while (tmp)
+    {
+		if (!cmd_list)
+    	{
+        	printf("cmd_list is NULL\n");
+        	return;
+   		}
+    	printf("cmd_list is valid...\n");
+        // Vérifiez que tmp->cmd et tmp->output ne sont pas NULL avant de les afficher
+        if (tmp->cmd != NULL)
+		{
+			printf("ok\n");
+			printf("cmd: %s\n", tmp->cmd);
+		}
+        else
+            printf("cmd: (null)\n");
+        if (tmp->output != NULL)
+            printf("output: %s\n", tmp->output);
+        else
+            printf("output: (null)\n");
+        i = 0;
+        while (tmp->args && tmp->args[i])
+        {
+            if (tmp->args[i] != NULL)
+                printf("args[%d]: %s\n", i, tmp->args[i]);
+            else
+                printf("args[%d]: (null)\n", i);
+            i++;
+        }
+        tmp = tmp->next;
+    }
+}
+
+void init_data(t_data *data)
+{
+    data->cmd_list = NULL;  // Liste des commandes est vide
+    data->env = NULL;       // L'environnement n'est pas encore initialisé
+    data->line = NULL;      // La ligne lue n'est pas encore initialisée
+    data->excode = 0;       // Code de sortie initialisé à 0 (pas d'erreur)
 }
 
 int	main(int argc, char **argv, char **envp)
 {
+	
 	t_data	data;
 
 	(void)argc;
 	(void)argv;
+	init_data(&data);
 	signal_init();
 	data.env = init_env(envp);
 	if (!data.env)
@@ -81,6 +121,8 @@ int	main(int argc, char **argv, char **envp)
 			if (data.cmd_list)
 			{
 				print_cmd_list(data.cmd_list);
+				test_cmd_node(data.cmd_list);
+				printf("main/ exec\n");
 				exec(&data);
 				free_cmd_list(data.cmd_list);
 			}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mrn <mrn@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 08:50:06 by olardeux          #+#    #+#             */
-/*   Updated: 2024/10/17 08:52:55 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/21 15:36:21 by mrn              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 int	ft_env(t_env *env)
 {
+	printf(PURPLE"executing env...\n"RESET);
 	while (env)
 	{
 		if (env->value)

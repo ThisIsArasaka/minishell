@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mrn <mrn@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 06:30:13 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/07 12:12:46 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/21 15:36:07 by mrn              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ int	add_env(t_env *env, char *arg)
 
 int	ft_export(t_cmd_list *cmd, t_env *env)
 {
+	printf(PURPLE"executing export...\n"RESET);
 	int	i;
 
 	i = 1;

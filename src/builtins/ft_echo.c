@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mrn <mrn@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 04:15:03 by olardeux          #+#    #+#             */
-/*   Updated: 2024/10/12 08:23:26 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/21 15:39:50 by mrn              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 int	ft_echo(t_cmd_list *cmd)
 {
+	printf(PURPLE"executing echo...\n" RESET);
 	int	i;
 	int	new_line;
 

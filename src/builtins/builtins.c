@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mrn <mrn@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 08:05:54 by olardeux          #+#    #+#             */
-/*   Updated: 2024/10/31 07:35:04 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/21 15:36:48 by mrn              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ int	builtin(t_data *data)
 
 int	is_builtin(t_cmd_list *cmd)
 {
+	printf(PURPLE"is_builtin: cmd->cmd = %s\n"RESET, cmd->cmd);
 	if (!ft_strncmp(cmd->cmd, "echo\0", 5))
 		return (1);
 	else if (!ft_strncmp(cmd->cmd, "env\0", 4))

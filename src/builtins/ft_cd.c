@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mrn <mrn@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 22:12:38 by olardeux          #+#    #+#             */
-/*   Updated: 2024/10/31 07:12:13 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/21 15:34:59 by mrn              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 int	ft_cd(t_cmd_list *cmd, t_env *env)
 {
+	printf(PURPLE"executing cd...\n"RESET);
 	char	*path;
 
 	if (!cmd->args[1])

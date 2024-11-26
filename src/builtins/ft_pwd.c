@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mrn <mrn@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 08:13:16 by olardeux          #+#    #+#             */
-/*   Updated: 2024/10/15 04:48:32 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/21 15:35:40 by mrn              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 int	ft_pwd(void)
 {
+	printf(PURPLE"executing pwd...\n"RESET);
 	char	*pwd;
 
 	pwd = getcwd(NULL, 0);
