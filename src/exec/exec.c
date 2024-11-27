@@ -96,29 +96,38 @@ void exec(t_data *data)
         init_fds_and_redirections(current_cmd, &fds, data);
 
         // Si la commande n'est pas un builtin, exécuter le processus
-        if (current_cmd->cmd && current_cmd->cmd[0]) {
-           if (is_builtin(current_cmd))
+        if (current_cmd->cmd && current_cmd->cmd[0]) 
+        {
+           if (is_builtin(current_cmd)) 
             {
-                if (ft_strncmp(current_cmd->cmd, "exit\0", 5) || 
-                        ft_strncmp(current_cmd->cmd, "cd\0", 3) || 
-                            ft_strncmp(current_cmd->cmd, "export\0", 7) || 
-                                ft_strncmp(current_cmd->cmd, "unset\0", 6))
+                builtin(data); // Exécuter directement
+            } 
+            else 
+            {
+                pid_t pid = fork();
+                if (pid == 0) 
                 {
-                    builtin(data);
-                    close_all_fds(&fds);
-                    return;
+                    // Processus enfant: exécution de la commande
+                    execute_process(data, current_cmd, &fds);
+                    exit(EXIT_SUCCESS);
+                } 
+                else if (pid > 0) 
+                {
+                    // Processus parent: attendre l'enfant
+                    waitpid(pid, NULL, 0);
+                } 
+                else 
+                {
+                    perror("fork");
+                    exit(EXIT_FAILURE);
                 }
-                builtin(data);
-            }
-            else
-            {
-                execute_process(data, current_cmd, &fds);
             }
         }
-
         // Fermer les descripteurs de fichiers après l'exécution
         close_fds_parent(&fds);
         fds.input = fds.pipes[0];
+
+        // restore_fds(&fds);
 
         // Si c'est la dernière commande, fermer également les fds
         if (!current_cmd->next)

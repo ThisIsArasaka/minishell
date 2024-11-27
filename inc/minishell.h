@@ -6,7 +6,7 @@
 /*   By: mrn <mrn@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 15:37:52 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/26 20:01:51 by mrn              ###   ########.fr       */
+/*   Updated: 2024/11/27 10:34:30 by mrn              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,9 @@ typedef struct s_fd
 	int				redir[2];
 	int				input;
 	int				output;
+	int				saved_stdin;   // Ajout pour sauvegarder STDIN
+    int				saved_stdout;  // Ajout pour sauvegarder STDOUT
+
 }					t_fd;
 
 
@@ -158,6 +161,7 @@ char	**env_list_to_envp(t_env *env_list);
 int	count_env_entries(t_env *env_list);
 
 void print_cmd_list(t_cmd_list *cmd_list);
+void restore_fds(t_fd *fd);
 
 
 
