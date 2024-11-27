@@ -1,29 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_env.c                                           :+:      :+:    :+:   */
+/*   exit_free.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/17 08:50:06 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/27 06:32:02 by olardeux         ###   ########.fr       */
+/*   Created: 2024/11/27 09:09:59 by olardeux          #+#    #+#             */
+/*   Updated: 2024/11/27 09:10:57 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_env(t_env *env)
+void	exit_free(t_data *data)
 {
-	while (env)
-	{
-		if (env->value)
-		{
-			ft_putstr_fd(env->name, 1);
-			ft_putstr_fd("=", 1);
-			ft_putstr_fd(env->value, 1);
-			ft_putstr_fd("\n", 1);
-		}
-		env = env->next;
-	}
-	return (0);
+	free_cmd_list(data->cmd_list);
+	free(data->line);
+	free_env(data->env);
+	exit(data->excode);
 }

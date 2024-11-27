@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 06:30:13 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/18 06:19:20 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/27 09:02:45 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,8 +105,7 @@ int	ft_export(t_cmd_list *cmd, t_env **env)
 		if (cmd->args[i][0])
 		{
 			if (!isvalid(cmd->args[i]))
-				printf("minishell: export: `%s': not a valid identifier\n",
-					cmd->args[i]);
+				error_msg("export", cmd->args[i]);
 			else
 			{
 				if (!add_env(env, cmd->args[i]))

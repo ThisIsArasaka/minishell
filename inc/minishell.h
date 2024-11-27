@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 15:37:52 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/25 06:13:36 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/27 09:11:46 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
+# include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
@@ -43,11 +44,20 @@
 
 # define PROMPT "minishell\033[0;34m$\033[0m "
 
+# define OUTPUT 1
+# define APPEND 2
+# define INPUT 3
+
+extern int				g_sig;
+
 typedef struct s_env
 {
 	char				*name;
 	char				*value;
+	char				*env_list;
+	bool				isunset;
 	struct s_env		*next;
+
 }						t_env;
 
 typedef struct s_redir
@@ -62,8 +72,12 @@ typedef struct s_cmd_list
 {
 	char				*cmd;
 	char				**args;
+	char				*cmd_path;
+
 	struct s_redir		*redir;
 	struct s_cmd_list	*next;
+	struct s_cmd_list	*prev;
+
 }						t_cmd_list;
 
 typedef struct s_data
@@ -71,9 +85,83 @@ typedef struct s_data
 	t_cmd_list			*cmd_list;
 	t_env				*env;
 	char				*line;
+	int					excode;
+	int					tmpexcode;
 }						t_data;
 
-extern int				g_status;
+typedef struct s_fd
+{
+	int					pipes[2];
+	int					redir[2];
+	int					input;
+	int					output;
+	int saved_stdin;  // Ajout pour sauvegarder STDIN
+	int saved_stdout; // Ajout pour sauvegarder STDOUT
+
+}						t_fd;
+
+# define GREEN "\033[0;32m"
+# define RED "\033[1;31m"
+# define RESET "\033[0m"
+# define PURPLE "\033[0;35m"
+# define CYAN "\033[1;96m"
+# define ITALIC "\033[3m"
+
+// int						g_status;
+
+// char **get_paths_from_env();
+// int handle_redirections(t_cmd_list *cmd_list);
+// void cleanup_exec(char **envp, char *cmd_path);
+// int count_cmds(t_cmd_list *cmd_list);
+// int **init_pipes(int num_cmds);
+// void close_pipes(int **pipe_fds, int num_cmds);
+// void exec_builtin(t_cmd_list *cmd, int **pipe_fds, int i, int num_cmds,
+// t_data *data);
+// void exec_external(t_cmd_list *cmd, int **pipe_fds, int i, int num_cmds,
+// t_data *data);
+// void exec(t_data *data);
+// int handle_redirections(t_cmd_list *cmd);
+// void exec_cmd(t_cmd_list *cmd_list, t_env *env);
+
+char	*find_cmd_path(t_data *data, char *cmd); //
+void					exec(t_data *data);
+void					exec_bultin(t_data *data, t_fd *fds, t_cmd_list *cmd);
+void					exec_cmd(t_data *data, t_cmd_list *cmd, char **envp);
+
+int						handle_heredoc(char *delimiter, t_data *data);
+void					loop_here_doc(char *delimiter, int fd, t_data *data);
+void					apply_redirections(t_cmd_list *cmd, int *fd_in,
+							int *fd_out, t_data *data);
+// void				run_builtins(t_cmd_list *cmd, t_fd *fds);
+void	child_builtins(t_fd *fds);                                         //
+void	execute_child(t_data *data, t_cmd_list *cmd, t_fd *fds);           //
+char	**get_paths_from_env(t_env *env);                                  //
+void	execute_process(t_data *data, t_cmd_list *current_cmd, t_fd *fds); //
+// int					handle_builtins(t_cmd_list *current_cmd);
+void	init_fds_and_redirections(t_cmd_list *current_cmd, t_fd *fds,
+								t_data *data); //
+// int					is_builtin_command(const char *command);
+int	is_dir(const char *path);                                              //
+char	*get_cmd_path(t_data *data, t_cmd_list *cmd, t_fd *fds, char **envp); //
+void	free_envp(char **envp);                                               //
+void	redirect_input_output(t_fd *fds);                                     //
+void	setup_pipes(t_fd *fds);                                               //
+void	close_fds_parent(t_fd *fds);                                          //
+
+void	init_fds(t_fd *fds);         //
+void	set_fds(t_fd *fd);           //
+void	close_all_fds(t_fd *fds);    //
+void	close_fds_parent(t_fd *fds); //
+void					wait_child(t_data *data);
+
+void					ft_free_split(char **split);
+char					*strjoin_free(char *s1, char *s2);
+void					init_data(t_data *data);
+
+int						count_env_entries(t_env *env_list);
+
+void					print_cmd_list(t_cmd_list *cmd_list);
+void					restore_fds(t_fd *fd);
 
 char					*read_file(char *filename);
 
@@ -90,6 +178,7 @@ t_env					*param_env(char *env);
 int						ft_isblank(char c);
 char					*ft_add_char(char *str, char c);
 int						is_special_char(char c);
+void					exit_free(t_data *data);
 
 // token
 
@@ -110,13 +199,13 @@ void					signal_init(void);
 // bultins-launcher
 
 int						is_builtin(t_cmd_list *cmd);
-int						builtin(t_data *data);
+int						builtin(t_data *data, t_cmd_list *cmd);
 
 // builtins
 
 int						ft_echo(t_cmd_list *cmd);
 int						ft_pwd(void);
-int						ft_exit(t_data *data);
+int						ft_exit(t_data *data, t_cmd_list *cmd);
 int						ft_export(t_cmd_list *cmd, t_env **env);
 int						ft_unset(t_cmd_list *cmd, t_env *env);
 int						ft_env(t_env *env);
