@@ -45,17 +45,6 @@ void	execute_process(t_data *data, t_cmd_list *current_cmd, t_fd *fds)
     }
 }
 
-// void	run_builtins(t_data *data, t_cmd_list *cmd, t_fd *fds)
-// {
-//     child_builtins(fds);
-//     if (ft_strncmp(cmd->cmd, "echo", 4) == 0 && ft_strlen(cmd->cmd) == 4)
-//         ft_echo(data, cmd, fds->output, fds);
-//     else if (ft_strncmp(cmd->cmd, "env", 3) == 0 && ft_strlen(cmd->cmd) == 3)
-//         bi_env(data, cmd, fds->output, fds);
-//     else if (ft_strncmp(cmd->cmd, "pwd", 3) == 0 && ft_strlen(cmd->cmd) == 3)
-//         bi_pwd(data, cmd, fds->output, fds);
-// }
-
 void	child_builtins(t_fd *fds)
 {
     if (fds->input != -2)
@@ -66,6 +55,16 @@ void	child_builtins(t_fd *fds)
         (close_all_fds(fds), exit(0));
 }
 
+// void	run_builtins(t_data *data, t_cmd_list *cmd, t_fd *fds)
+// {
+//     child_builtins(fds);
+//     if (ft_strncmp(cmd->cmd, "echo", 4) == 0 && ft_strlen(cmd->cmd) == 4)
+//         ft_echo(data, cmd, fds->output, fds);
+//     else if (ft_strncmp(cmd->cmd, "env", 3) == 0 && ft_strlen(cmd->cmd) == 3)
+//         bi_env(data, cmd, fds->output, fds);
+//     else if (ft_strncmp(cmd->cmd, "pwd", 3) == 0 && ft_strlen(cmd->cmd) == 3)
+//         bi_pwd(data, cmd, fds->output, fds);
+// }
 
 
 // char	*get_cmd_path(t_data *data, t_cmd_list *cmd, t_fd *fds, char **envp)

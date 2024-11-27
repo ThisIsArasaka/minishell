@@ -97,8 +97,23 @@ void exec(t_data *data)
 
         // Si la commande n'est pas un builtin, exécuter le processus
         if (current_cmd->cmd && current_cmd->cmd[0]) {
-            //if (!(is_builtin(current_cmd)))
+           if (is_builtin(current_cmd))
+            {
+                if (ft_strncmp(current_cmd->cmd, "exit\0", 5) || 
+                        ft_strncmp(current_cmd->cmd, "cd\0", 3) || 
+                            ft_strncmp(current_cmd->cmd, "export\0", 7) || 
+                                ft_strncmp(current_cmd->cmd, "unset\0", 6))
+                {
+                    builtin(data);
+                    close_all_fds(&fds);
+                    return;
+                }
+                builtin(data);
+            }
+            else
+            {
                 execute_process(data, current_cmd, &fds);
+            }
         }
 
         // Fermer les descripteurs de fichiers après l'exécution
