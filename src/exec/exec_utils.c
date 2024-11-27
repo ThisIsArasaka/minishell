@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	init_fds_and_redirections(t_cmd_list *current_cmd, t_fd *fds)
+void	init_fds_and_redirections(t_cmd_list *current_cmd, t_fd *fds, t_data *data)
 {
     init_fds(fds); // Initialisation des fds
     if (current_cmd->next) 
@@ -8,7 +8,7 @@ void	init_fds_and_redirections(t_cmd_list *current_cmd, t_fd *fds)
         if (pipe(fds->pipes) == -1)
             exit(1);
     }
-    //apply_redirections(current_cmd, &fds->redir[0], &fds->redir[1]);
+    apply_redirections(current_cmd, &fds->redir[0], &fds->redir[1], data);
     set_fds(fds); // Appliquer les fds
 }
 
@@ -23,7 +23,7 @@ int	is_dir(const char *path)
 
 void	execute_process(t_data *data, t_cmd_list *current_cmd, t_fd *fds)
 {
-	printf("execu/ execute process\n");
+	printf("execu/ execute_process...\n");
     pid_t	pid;
 
     pid = fork();
@@ -38,7 +38,6 @@ void	execute_process(t_data *data, t_cmd_list *current_cmd, t_fd *fds)
         {
             builtin(data);
             close_all_fds(fds);
-            printf("execu/ okko\n");
             exit(0);
         }
         else

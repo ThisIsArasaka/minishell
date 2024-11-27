@@ -6,7 +6,7 @@
 /*   By: mrn <mrn@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 08:05:54 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/26 14:25:56 by mrn              ###   ########.fr       */
+/*   Updated: 2024/11/26 19:45:01 by mrn              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	builtin(t_data *data)
 
 int	is_builtin(t_cmd_list *cmd)
 {
-	printf(PURPLE"is_builtin: cmd->cmd = %s\n"RESET, cmd->cmd);
+	printf(PURPLE"is %s a bultin ?\n"RESET, cmd->cmd);
 	if (!ft_strncmp(cmd->cmd, "echo\0", 5))
 		return (1);
 	else if (!ft_strncmp(cmd->cmd, "env\0", 4))
@@ -48,5 +48,6 @@ int	is_builtin(t_cmd_list *cmd)
 		return (1);
 	else if (!ft_strncmp(cmd->cmd, "exit\0", 5))
 		return (1);
+	printf("not a builtin\n");
 	return (0);
 }

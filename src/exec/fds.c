@@ -28,25 +28,18 @@ void	set_fds(t_fd *fd)
 
 void	close_all_fds(t_fd *fds)
 {
-    printf("close all fds\n");
     if (!(fds->pipes[0] == -2) && fds->pipes[0] >= 0)
         close(fds->pipes[0]);
-    printf("close all fds 1\n");
     if (!(fds->pipes[1] == -2) && fds->pipes[1] >= 0)
         close(fds->pipes[1]);
-    printf("close all fds 2\n");
     if (!(fds->redir[0] == -2) && fds->redir[0] >= 0)
         close(fds->redir[0]);
-    printf("close all fds 3\n");
     if (!(fds->redir[1] == -2) && fds->redir[1] >= 0)
         close(fds->redir[1]);
-    printf("close all fds 4\n");
     if (!(fds->output == -2) && fds->output >= 0)
         close(fds->output);
-    printf("close all fds 5\n");
     if (!(fds->input == -2) && fds->input >= 0)
         close(fds->input);
-    printf("close all fds end\n");
 }
 
 void	close_fds_parent(t_fd *fds)

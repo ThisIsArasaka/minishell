@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	loop_here_doc(char *delimiter, int fd)
+void	loop_here_doc(char *delimiter, int fd, t_data *data)
 {
 	char	*line;
 	char	*limiter;
@@ -11,8 +11,8 @@ void	loop_here_doc(char *delimiter, int fd)
 		line = readline(RED "> " RESET);
 		if (g_sig == SIGINT)
 		{
-			//shell->excode = 130;
-			//shell->tmpexcode = 130;
+			data->excode = 130;
+			data->tmpexcode = 130;
 			g_sig = 0;
 			free(line);
 			break ;
@@ -29,7 +29,7 @@ void	loop_here_doc(char *delimiter, int fd)
 	free(limiter);
 }
 
-int	handle_heredoc(char *delimiter)
+int	handle_heredoc(char *delimiter, t_data *data)
 {
 	char	*file_name;
 	int		fd_out;
@@ -45,7 +45,7 @@ int	handle_heredoc(char *delimiter)
 		free(file_name);
 		return (-1);
 	}
-	loop_here_doc(delimiter, fd_out);
+	loop_here_doc(delimiter, fd_out, data);
 	close(fd_out);
 	fd_in = open(file_name, O_RDONLY);
 	if (fd_in == -1)

@@ -6,7 +6,7 @@
 /*   By: mrn <mrn@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 15:37:52 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/26 14:30:56 by mrn              ###   ########.fr       */
+/*   Updated: 2024/11/26 20:01:51 by mrn              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,15 +72,12 @@ typedef struct s_cmd_list
 {
 	char				*cmd;
 	char				**args;
+	char		*cmd_path;
 	
-	char				*output;
-	char				*input;
-	int					append;
-	char 				*current_cmd;
-	char 				*cmd_path;
 	
 	struct s_redir		*redir;
 	struct s_cmd_list	*next;
+	struct s_cmd_list	*prev;
 	
 }						t_cmd_list;
 
@@ -89,7 +86,8 @@ typedef struct s_data
 	t_cmd_list			*cmd_list;
 	t_env				*env;
 	char				*line;
-	int			excode;
+	int					excode;
+	int				tmpexcode;
 }						t_data;
 
 typedef struct s_fd
@@ -127,15 +125,16 @@ char				*find_cmd_path(t_data *data, char *cmd); //
 void				exec(t_data *data); //
 void				exec_cmd(t_data *data, t_cmd_list *cmd, char **envp);
 
-int					handle_heredoc(char *delimiter);
-void				loop_here_doc(char *delimiter, int fd);
+int					handle_heredoc(char *delimiter, t_data *data);
+void				loop_here_doc(char *delimiter, int fd, t_data *data);
+void	apply_redirections(t_cmd_list *cmd, int *fd_in, int *fd_out, t_data *data);
 // void				run_builtins(t_cmd_list *cmd, t_fd *fds);
 void				child_builtins(t_fd *fds); //
 void				execute_child(t_data *data, t_cmd_list *cmd, t_fd *fds); //
 char 				**get_paths_from_env(t_env *env); //
 void				execute_process(t_data *data, t_cmd_list *current_cmd, t_fd *fds); //
 // int					handle_builtins(t_cmd_list *current_cmd);
-void				init_fds_and_redirections(t_cmd_list *current_cmd, t_fd *fds);//
+void				init_fds_and_redirections(t_cmd_list *current_cmd, t_fd *fds, t_data *data);//
 // int					is_builtin_command(const char *command);
 int					is_dir(const char *path); //
 char				*get_cmd_path(t_data *data, t_cmd_list *cmd, t_fd *fds, char **envp); //
@@ -150,8 +149,6 @@ void	close_all_fds(t_fd *fds); //
 void	close_fds_parent(t_fd *fds); //
 void	wait_child(t_data *data); 
 
-void	loop_here_doc(char *delimiter, int fd);
-int	handle_heredoc(char *delimiter);
 
 void	ft_free_split(char **split);
 char	*strjoin_free(char *s1, char *s2);
@@ -162,12 +159,6 @@ int	count_env_entries(t_env *env_list);
 
 void print_cmd_list(t_cmd_list *cmd_list);
 
-
-
-
-//int					handle_input_redir(t_redir *redir, int fd_in);
-//int					handle_output_redir(t_redir *redir, int fd_out);
-//void				apply_redirections(t_cmd_list *cmd, int *fd_in, int *fd_out);
 
 
 

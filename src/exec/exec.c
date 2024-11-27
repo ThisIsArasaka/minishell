@@ -89,10 +89,11 @@ void exec(t_data *data)
 
     fds.input = -2;
     current_cmd = data->cmd_list;
+    current_cmd->prev = NULL;
     while (current_cmd) 
     {   
         // Initialiser les redirections et les fds
-        init_fds_and_redirections(current_cmd, &fds);
+        init_fds_and_redirections(current_cmd, &fds, data);
 
         // Si la commande n'est pas un builtin, exécuter le processus
         if (current_cmd->cmd && current_cmd->cmd[0]) {
@@ -107,6 +108,9 @@ void exec(t_data *data)
         // Si c'est la dernière commande, fermer également les fds
         if (!current_cmd->next)
             close_fds_parent(&fds);
+
+        if (current_cmd->next)
+		    current_cmd->next->prev = current_cmd;
 
         // Passer à la commande suivante
         current_cmd = current_cmd->next;
