@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 09:13:15 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/15 15:38:03 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/25 07:19:16 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ int	create_cmd(t_cmd_list *cmd, t_parsing *parsing, t_token *start)
 
 	j = 0;
 	parsing->i = 0;
+	if (!start)
+		return (error_msg(SYNTAX_ERROR, NULL), 0);
 	if (!get_command(cmd, parsing, start))
 		return (0);
 	while (start && start->type != PIPE)
