@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 09:23:44 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/25 07:02:48 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/27 05:53:07 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ char	*init_var(char *line, int place, t_env *env)
 
 	if (line[place + 1] == '?')
 	{
-		var = ft_itoa(g_status);
+
+		var = ft_itoa(g_sig);
 		if (!var)
 			return (error_msg(MALLOC_ERROR, NULL), free(line), NULL);
 	}
@@ -89,6 +90,5 @@ char	*check(char *line, t_env *env)
 		}
 		i++;
 	}
-	printf("line: %s\n", line);
 	return (line);
 }
