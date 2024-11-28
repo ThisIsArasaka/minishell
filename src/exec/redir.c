@@ -43,7 +43,8 @@ int	handle_input_redir(t_redir *redir, int fd_in, t_data *data)
 	}
 	else if (redir->type == HEREDOC)
 	{
-		fd_in = handle_heredoc(redir->file, data); // Fonction handle_heredoc à adapter si nécessaire
+		fd_in = handle_heredoc(redir->file, data);
+		// Fonction handle_heredoc à adapter si nécessaire
 		if (fd_in == -1)
 		{
 			perror("heredoc.tmp");
@@ -53,7 +54,8 @@ int	handle_input_redir(t_redir *redir, int fd_in, t_data *data)
 	return (fd_in);
 }
 
-void	apply_redirections(t_cmd_list *cmd, int *fd_in, int *fd_out, t_data *data)
+void	apply_redirections(t_cmd_list *cmd, int *fd_in, int *fd_out,
+		t_data *data)
 {
 	t_redir	*redir;
 

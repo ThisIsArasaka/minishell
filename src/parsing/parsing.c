@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 09:13:15 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/27 05:53:22 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/28 06:17:49 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,16 +58,16 @@ t_cmd_list	*token_to_command(t_parsing *parsing)
 	return (cmd_list);
 }
 
-t_cmd_list	*parsing(char **line, t_env *env)
+t_cmd_list	*parsing(t_data *data)
 {
 	t_parsing	parsing;
 	t_cmd_list	*cmd_list;
 
-	parsing.env = env;
-	*line = check(*line, env);
-	if (!*line)
+	parsing.env = data->env;
+	data->line = check(data->line, data);
+	if (!data->line)
 		return (NULL);
-	parsing.tokens = token_split(*line);
+	parsing.tokens = token_split(data->line);
 	if (!parsing.tokens)
 		return (NULL);
 	cmd_list = token_to_command(&parsing);

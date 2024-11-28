@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 22:37:10 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/16 15:54:48 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/28 06:20:26 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 typedef struct s_cmd_list	t_cmd_list;
 typedef struct s_env		t_env;
 typedef struct s_redir		t_redir;
+typedef struct s_data		t_data;
 
 enum						e_token
 {
@@ -45,7 +46,7 @@ typedef struct s_parsing
 	struct s_env			*env;
 }							t_parsing;
 
-t_cmd_list					*parsing(char **line, t_env *env);
+t_cmd_list					*parsing(t_data *data);
 
 int							init_cmd_list(t_cmd_list **cmd_list,
 								t_token *tokens);
@@ -77,8 +78,8 @@ int							add_special_char(char *line, t_parsing *parsing);
 t_token						*token_split(char *line);
 int							tokens_count(t_token *tokens);
 
-char						*check(char *line, t_env *env);
-char						*replace_var(char *line, int place, t_env *env);
+char						*check(char *line, t_data *data);
+char						*replace_var(char *line, int place, t_data *data);
 int							in_quote(char *line, int place);
 void						add_var(int *i, int *j, char *var, char *new);
 void						add_var_quoted(int *i, int *j, char *var,

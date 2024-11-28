@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 15:38:02 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/27 08:57:34 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/28 10:38:48 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int		g_sig = 0;
 //     if (!node)
 //     {
 //         printf("Node is NULL\n");
-//         return;
+//         return ;
 //     }
 
 //     printf("Node at address: %p\n", (void *)node);
@@ -84,10 +84,11 @@ void	print_cmd_list(t_cmd_list *cmd_list)
 // 		if (!cmd_list)
 //     	{
 //         	printf("cmd_list is NULL\n");
-//         	return;
+//         	return ;
 //    		}
 //     	printf("cmd_list is valid...\n");
-//         // Vérifiez que tmp->cmd et tmp->output ne sont pas NULL avant de les afficher
+//
+// Vérifiez que tmp->cmd et tmp->output ne sont pas NULL avant de les afficher
 //         if (tmp->cmd != NULL)
 // 		{
 // 			printf("ok\n");
@@ -112,12 +113,12 @@ void	print_cmd_list(t_cmd_list *cmd_list)
 //     }
 // }
 
-void init_data(t_data *data)
+void	init_data(t_data *data)
 {
-    data->cmd_list = NULL;  // Liste des commandes est vide
-    data->env = NULL;       // L'environnement n'est pas encore initialisé
-    data->line = NULL;      // La ligne lue n'est pas encore initialisée
-    data->excode = 0;       // Code de sortie initialisé à 0 (pas d'erreur)
+	data->cmd_list = NULL; // Liste des commandes est vide
+	data->env = NULL;      // L'environnement n'est pas encore initialisé
+	data->line = NULL;     // La ligne lue n'est pas encore initialisée
+	data->excode = 0;      // Code de sortie initialisé à 0 (pas d'erreur)
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -138,11 +139,11 @@ int	main(int argc, char **argv, char **envp)
 		if (data.line[0] != '\0')
 		{
 			add_history(data.line);
-			data.cmd_list = parsing(&data.line, data.env);
+			data.cmd_list = parsing(&data);
 			if (data.cmd_list)
 			{
-				print_cmd_list(data.cmd_list);
-				//test_cmd_node(data.cmd_list);
+				// print_cmd_list(data.cmd_list);
+				// test_cmd_node(data.cmd_list);
 				exec(&data);
 				free_cmd_list(data.cmd_list);
 			}

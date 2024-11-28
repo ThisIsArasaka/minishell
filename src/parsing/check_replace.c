@@ -6,33 +6,32 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 09:23:44 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/27 05:53:07 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/28 10:40:53 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*init_var(char *line, int place, t_env *env)
+char	*init_var(char *line, int place, t_data *data)
 {
 	char	*var;
 
 	if (line[place + 1] == '?')
 	{
-
-		var = ft_itoa(g_sig);
+		var = ft_itoa(data->excode);
 		if (!var)
 			return (error_msg(MALLOC_ERROR, NULL), free(line), NULL);
 	}
 	else
 	{
-		var = get_env_value(env, line + place + 1);
+		var = get_env_value(data->env, line + place + 1);
 		if (!var)
 			var = "";
 	}
 	return (var);
 }
 
-char	*replace_var(char *line, int place, t_env *env)
+char	*replace_var(char *line, int place, t_data *data)
 {
 	int		i;
 	int		j;
@@ -41,7 +40,7 @@ char	*replace_var(char *line, int place, t_env *env)
 
 	i = 0;
 	j = 0;
-	var = init_var(line, place, env);
+	var = init_var(line, place, data);
 	new = malloc(sizeof(char) * (ft_strlen(line) + ft_strlen(var) + 2));
 	if (!new)
 		return (error_msg(MALLOC_ERROR, NULL), free(line), NULL);
@@ -66,7 +65,7 @@ char	*replace_var(char *line, int place, t_env *env)
 	return (free(line), new);
 }
 
-char	*check(char *line, t_env *env)
+char	*check(char *line, t_data *data)
 {
 	int	i;
 
@@ -82,9 +81,9 @@ char	*check(char *line, t_env *env)
 			line[i] = '\0';
 			break ;
 		}
-		if (line[i] == '$' && !ft_isblank(line[i + 1]))
+		if (line[i] == '$' && (!ft_isblank(line[i + 1]) && line[i + 1] != '\0'))
 		{
-			line = replace_var(line, i, env);
+			line = replace_var(line, i, data);
 			if (!line)
 				return (NULL);
 		}

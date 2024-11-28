@@ -105,15 +105,14 @@ void	free_envp(char **envp)
 
 void	execute_child(t_data *data, t_cmd_list *cmd, t_fd *fds)
 {
-	printf("execu/ execute child\n");
 	if (fds->pipes[0] != -2)
 		close(fds->pipes[0]);
 	if (fds->input != -2)
 		if (dup2(fds->input, STDIN_FILENO) == -1)
-			(close_all_fds(fds), exit(1));
+			(close_all_fds(fds), exit_free(data));
 	if (fds->output != -2)
 		if (dup2(fds->output, STDOUT_FILENO) == -1)
-			(close_all_fds(fds), exit(1));
+			(close_all_fds(fds), exit_free(data));
 	close_all_fds(fds);
 	exec_cmd(data, cmd, NULL); // Exécution de la commande
 }

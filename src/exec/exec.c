@@ -57,6 +57,11 @@ int	is_builtin_command(t_data *data, t_cmd_list *cmd)
 		ft_unset(cmd, data->env);
 		return (1);
 	}
+	if (ft_strncmp(cmd->cmd, "export\0", 7) == 0 && cmd->args[1])
+	{
+		ft_export(cmd, data);
+		return (1);
+	}
 	return (0);
 }
 
