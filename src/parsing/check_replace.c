@@ -18,6 +18,7 @@ char	*init_var(char *line, int place, t_env *env)
 
 	if (line[place + 1] == '?')
 	{
+
 		var = ft_itoa(g_sig);
 		if (!var)
 			return (error_msg(MALLOC_ERROR, NULL), free(line), NULL);

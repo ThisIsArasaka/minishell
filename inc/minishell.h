@@ -89,6 +89,7 @@ typedef struct s_data
 	int					tmpexcode;
 }						t_data;
 
+
 typedef struct s_fd
 {
 	int					pipes[2];
@@ -106,8 +107,6 @@ typedef struct s_fd
 # define PURPLE "\033[0;35m"
 # define CYAN "\033[1;96m"
 # define ITALIC "\033[3m"
-
-// int						g_status;
 
 // char **get_paths_from_env();
 // int handle_redirections(t_cmd_list *cmd_list);
