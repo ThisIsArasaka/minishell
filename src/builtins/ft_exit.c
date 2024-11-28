@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 07:47:08 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/27 06:22:42 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/29 00:03:36 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,15 @@
 int	atoi_check(char *str)
 {
 	int	i;
+	long res;
 
 	i = 0;
 	while (str[i])
 	{
 		if (!ft_isdigit(str[i]))
+			return (0);
+		res = res * 10 + str[i] - '0';
+		if (res > INT_MAX)
 			return (0);
 		i++;
 	}

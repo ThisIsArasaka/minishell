@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mrn <mrn@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 06:37:44 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/21 15:35:50 by mrn              ###   ########.fr       */
+/*   Updated: 2024/11/28 23:58:01 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ void	unset_var(t_env *prev, t_env *tmp, t_env *env)
 
 int	ft_unset(t_cmd_list *cmd, t_env *env)
 {
-	printf(PURPLE"executing unset...\n"RESET);
 	t_env	*tmp;
 	t_env	*prev;
 	int		i;

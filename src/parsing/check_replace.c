@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 09:23:44 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/28 10:40:53 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/29 00:05:23 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ char	*check(char *line, t_data *data)
 
 	i = 0;
 	if (!check_quote(line))
-		return (free(line), NULL);
+		return (data->excode = 2, error_msg("quote", NULL), free(line), NULL);
 	while (line[i])
 	{
 		if (line[i] == '\'')

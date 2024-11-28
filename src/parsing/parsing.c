@@ -6,32 +6,33 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 09:13:15 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/28 06:17:49 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/29 00:07:34 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	create_cmd(t_cmd_list *cmd, t_parsing *parsing, t_token *start)
+int	create_cmd(t_cmd_list *cmd, t_parsing *parsing, t_token *start,
+		t_data *data)
 {
 	int	j;
 
 	j = 0;
 	parsing->i = 0;
 	if (!start)
-		return (error_msg(SYNTAX_ERROR, NULL), 0);
+		return (data->excode = 1, error_msg(SYNTAX_ERROR, NULL), 0);
 	if (!get_command(cmd, parsing, start))
 		return (0);
 	while (start && start->type != PIPE)
 	{
 		if (!detect_token(cmd, parsing, &start, &j))
-			return (0);
+			return (data->excode = 1, 0);
 	}
 	cmd->args[j] = NULL;
 	return (1);
 }
 
-t_cmd_list	*token_to_command(t_parsing *parsing)
+t_cmd_list	*token_to_command(t_parsing *parsing, t_data *data)
 {
 	t_token		*tmp;
 	t_cmd_list	*cmd_list;
@@ -41,7 +42,7 @@ t_cmd_list	*token_to_command(t_parsing *parsing)
 	if (!init_cmd_list(&cmd_list, tmp))
 		return (NULL);
 	current = cmd_list;
-	if (!create_cmd(current, parsing, tmp))
+	if (!create_cmd(current, parsing, tmp, data))
 		return (free_cmd_list(cmd_list), NULL);
 	while (tmp)
 	{
@@ -50,7 +51,7 @@ t_cmd_list	*token_to_command(t_parsing *parsing)
 			if (!init_cmd_list(&current->next, tmp->next))
 				return (free_cmd_list(cmd_list), NULL);
 			current = current->next;
-			if (!create_cmd(current, parsing, tmp->next))
+			if (!create_cmd(current, parsing, tmp->next, data))
 				return (free_cmd_list(cmd_list), NULL);
 		}
 		tmp = tmp->next;
@@ -70,7 +71,7 @@ t_cmd_list	*parsing(t_data *data)
 	parsing.tokens = token_split(data->line);
 	if (!parsing.tokens)
 		return (NULL);
-	cmd_list = token_to_command(&parsing);
+	cmd_list = token_to_command(&parsing, data);
 	if (!cmd_list)
 		return (free_tokens(parsing.tokens), NULL);
 	free_tokens(parsing.tokens);

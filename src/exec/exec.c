@@ -49,7 +49,7 @@ int	is_builtin_command(t_data *data, t_cmd_list *cmd)
 	}
 	if (ft_strncmp(cmd->cmd, "cd\0", 3) == 0)
 	{
-		ft_cd(cmd, data->env);
+		ft_cd(cmd, data);
 		return (1);
 	}
 	if (ft_strncmp(cmd->cmd, "unset\0", 6) == 0)

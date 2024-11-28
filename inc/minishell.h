@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 15:37:52 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/28 11:00:25 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/28 23:48:31 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,7 +208,7 @@ int						ft_exit(t_data *data, t_cmd_list *cmd);
 int						ft_export(t_cmd_list *cmd, t_data *data);
 int						ft_unset(t_cmd_list *cmd, t_env *env);
 int						ft_env(t_env *env);
-int						ft_cd(t_cmd_list *cmd, t_env *env);
+int						ft_cd(t_cmd_list *cmd, t_data *data);
 
 int						name_match(char *name, char *arg);
 
