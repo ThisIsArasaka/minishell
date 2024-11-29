@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 09:23:44 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/29 00:05:23 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/29 10:10:10 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,8 @@ char	*check(char *line, t_data *data)
 			line[i] = '\0';
 			break ;
 		}
-		if (line[i] == '$' && (!ft_isblank(line[i + 1]) && line[i + 1] != '\0'))
+		if (line[i] == '$' && (!ft_isblank(line[i + 1]) && line[i + 1] != '\0'
+				&& (ft_isalnum(line[i + 1]) || line[i + 1] == '?')))
 		{
 			line = replace_var(line, i, data);
 			if (!line)

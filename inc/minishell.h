@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 15:37:52 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/28 23:48:31 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/29 11:17:38 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@
 # define NO_CMD "command not found"
 # define ENV_INIT_FAIL "env initialization failed"
 # define HOME_NOT_SET "HOME not set"
-# define CD_ERROR "cd error"
+# define CD_ERROR "cd : no such file or directory"
 # define EXPORT_ERROR "export : not a valid identifier"
 
 # ifndef FILE_READ_BUFFER_SIZE
@@ -193,7 +193,8 @@ void					error_msg(char *msg, char *arg);
 
 // signal
 
-void					signal_init(void);
+void					init_sig(void);
+void					init_sig_heredoc(void);
 
 // bultins-launcher
 

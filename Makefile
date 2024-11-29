@@ -6,7 +6,7 @@
 #    By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/07 04:08:54 by olardeux          #+#    #+#              #
-#    Updated: 2024/11/27 09:12:11 by olardeux         ###   ########.fr        #
+#    Updated: 2024/11/29 11:32:45 by olardeux         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror -g3 -I/opt/homebrew/opt/readline/include
 LDFLAGS = -L/opt/homebrew/opt/readline/lib -lreadline
 RM = rm -f
-SRC_FILE = main.c read_file.c signals.c
+SRC_FILE = main.c  signals.c
 BULTINS_FILE = ft_echo.c ft_pwd.c ft_exit.c ft_export.c ft_unset.c ft_env.c \
 				ft_cd.c builtins.c
 PARSING_FILE = parsing.c quote_check.c \

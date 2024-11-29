@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 03:22:11 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/25 06:55:48 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/29 11:31:53 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,15 +74,15 @@ char	*get_env_exec(t_env *env, char *name)
 	int		i;
 	char	**path;
 	char	*cmd;
-	char	*PATH;
+	char	*path_var;
 
 	i = -1;
 	if (name[0] == '.' || name[0] == '/' || name[0] == '\0')
 		return (name);
-	PATH = get_env_value(env, "PATH");
-	if (!PATH)
+	path_var = get_env_value(env, "PATH");
+	if (!path_var)
 		return (name);
-	path = ft_split(PATH, ':');
+	path = ft_split(path_var, ':');
 	if (!path)
 		return (NULL);
 	while (path[++i])

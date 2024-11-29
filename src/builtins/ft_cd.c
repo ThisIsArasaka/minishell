@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 22:12:38 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/28 23:55:10 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/29 11:05:18 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,22 @@ char	*set_path(t_cmd_list *cmd, t_env *env)
 {
 	char	*path;
 
-	if (!cmd->args[1])
+	if (!cmd->args[1] || cmd->args[1][0] == '~')
 	{
 		path = get_env_value(env, "HOME");
 		if (!path)
 			return (error_msg(HOME_NOT_SET, NULL), NULL);
+		if (!cmd->args[1])
+			path = ft_strdup(path);
+		else
+			path = ft_strjoin(path, cmd->args[1] + 1);
 	}
-	else if (cmd->args[1][0] == '~')
+	else if (cmd->args[1][0] == '-')
 	{
-		path = ft_strjoin(get_env_value(env, "HOME"), cmd->args[1] + 1);
+		path = get_env_value(env, "OLDPWD");
 		if (!path)
-			return (error_msg(MALLOC_ERROR, NULL), NULL);
+			return (error_msg("cd", "OLDPWD not set"), NULL);
+		path = ft_strdup(path);
 	}
 	else
 		path = ft_strdup(cmd->args[1]);
@@ -44,7 +49,7 @@ void	update_pwd(t_env *env)
 	pwd = getcwd(NULL, 0);
 	if (!pwd)
 		return (error_msg(CD_ERROR, NULL));
-	oldpwd = get_env_value(env, "PWD");
+	oldpwd = ft_strdup(get_env_value(env, "PWD"));
 	tmp = env;
 	while (tmp)
 	{
@@ -66,7 +71,7 @@ int	ft_cd(t_cmd_list *cmd, t_data *data)
 {
 	char	*path;
 
-	if (cmd->args[2])
+	if (cmd->args[1] && cmd->args[2])
 		return (data->excode = 1, error_msg("cd", "too many arguments"), 1);
 	path = set_path(cmd, data->env);
 	if (!path)
