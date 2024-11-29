@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+         #
+#    By: mrn <mrn@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/07 04:08:54 by olardeux          #+#    #+#              #
-#    Updated: 2024/11/29 11:32:45 by olardeux         ###   ########.fr        #
+#    Updated: 2024/11/29 18:12:38 by mrn              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,8 +20,8 @@ BULTINS_FILE = ft_echo.c ft_pwd.c ft_exit.c ft_export.c ft_unset.c ft_env.c \
 				ft_cd.c builtins.c
 PARSING_FILE = parsing.c quote_check.c \
 				token.c quote.c special_char.c check_replace.c add_token.c
-EXEC_FILE = exec.c exec_utils.c fds.c redir.c exec_utils2.c heredoc.c
-ENV_FILE = env.c env_init.c
+EXEC_FILE = exec_utils.c exec.c fds.c heredoc.c redir.c 
+ENV_FILE = env_init.c env.c
 UTILS_FILE = parsing_utils.c token_utils.c cmd_utils.c free.c error.c check_replace_utils.c exit_free.c
 SRC_DIR = src
 BULTINS_DIR = src/builtins

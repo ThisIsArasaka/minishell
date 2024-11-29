@@ -37,7 +37,7 @@ int	handle_heredoc(char *delimiter, t_data *data)
 
 	file_name = ft_strdup("heredoc_tmp_");
 	while (access(file_name, F_OK) == 0)
-		file_name = strjoin_free(file_name, "42");
+		file_name = ft_strjoin_free(file_name, "42");
 	fd_out = open(file_name, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (fd_out == -1)
 	{

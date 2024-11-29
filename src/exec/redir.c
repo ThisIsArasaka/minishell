@@ -1,5 +1,31 @@
 #include "minishell.h"
 
+int	handle_input_redir(t_redir *redir, int fd_in, t_data *data)
+{
+	if (fd_in != -2)
+		close(fd_in);
+	if (redir->type == INPUT)
+	{
+		fd_in = open(redir->file, O_RDONLY);
+		if (fd_in == -1)
+		{
+			perror(redir->file);
+			data->excode = 1;
+			return (-1);
+		}
+	}
+	else if (redir->type == HEREDOC)
+	{
+		fd_in = handle_heredoc(redir->file, data);
+		if (fd_in == -1)
+		{
+			perror("heredoc.tmp");
+			return (-1);
+		}
+	}
+	return (fd_in);
+}
+
 int	handle_output_redir(t_redir *redir, int fd_out, t_data *data)
 {
 	if (fd_out != -2)
@@ -27,35 +53,8 @@ int	handle_output_redir(t_redir *redir, int fd_out, t_data *data)
 	return (fd_out);
 }
 
-int	handle_input_redir(t_redir *redir, int fd_in, t_data *data)
-{
-	if (fd_in != -2)
-		close(fd_in);
-	if (redir->type == INPUT)
-	{
-		fd_in = open(redir->file, O_RDONLY);
-		if (fd_in == -1)
-		{
-			perror(redir->file);
-			data->excode = 1;
-			return (-1);
-		}
-	}
-	else if (redir->type == HEREDOC)
-	{
-		fd_in = handle_heredoc(redir->file, data);
-		// Fonction handle_heredoc à adapter si nécessaire
-		if (fd_in == -1)
-		{
-			perror("heredoc.tmp");
-			return (-1);
-		}
-	}
-	return (fd_in);
-}
-
 void	apply_redirections(t_cmd_list *cmd, int *fd_in, int *fd_out,
-		t_data *data)
+t_data *data)
 {
 	t_redir	*redir;
 

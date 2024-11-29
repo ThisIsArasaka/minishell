@@ -1,95 +1,5 @@
 #include "minishell.h"
 
-void	init_fds_and_redirections(t_cmd_list *current_cmd, t_fd *fds,
-		t_data *data)
-{
-	init_fds(fds); // Initialisation des fds
-	if (current_cmd->next)
-	{
-		if (pipe(fds->pipes) == -1)
-		{
-			data->excode = 1;
-			error_msg("pipe failed", NULL);
-			exit_free(data);
-		}
-	}
-	apply_redirections(current_cmd, &fds->redir[0], &fds->redir[1], data);
-	set_fds(fds); // Appliquer les fds
-}
-
-int	is_dir(const char *path)
-{
-	struct stat	path_stat;
-
-	if (stat(path, &path_stat) != 0)
-		return (0);
-	return (S_ISDIR(path_stat.st_mode));
-}
-
-void	execute_process(t_data *data, t_cmd_list *current_cmd, t_fd *fds)
-{
-	pid_t	pid;
-
-	pid = fork();
-	if (pid == -1)
-	{
-		close_all_fds(fds);
-		exit_free(data);
-	}
-	else if (pid == 0)
-	{
-		if (is_builtin(current_cmd)) // Commande builtin
-			exec_bultin(data, fds, current_cmd);
-		else
-			execute_child(data, current_cmd, fds);
-	}
-}
-
-void	child_builtins(t_fd *fds)
-{
-	if (fds->input != -2)
-		close(fds->input);
-	if (fds->output == -2)
-		fds->output = dup(STDOUT_FILENO);
-	if (fds->output == -1)
-		(close_all_fds(fds), exit(0));
-}
-
-// void	run_builtins(t_data *data, t_cmd_list *cmd, t_fd *fds)
-// {
-//     child_builtins(fds);
-//     if (ft_strncmp(cmd->cmd, "echo", 4) == 0 && ft_strlen(cmd->cmd) == 4)
-//         ft_echo(data, cmd, fds->output, fds);
-//     else if (ft_strncmp(cmd->cmd, "env", 3) == 0 && ft_strlen(cmd->cmd) == 3)
-//         bi_env(data, cmd, fds->output, fds);
-//     else if (ft_strncmp(cmd->cmd, "pwd", 3) == 0 && ft_strlen(cmd->cmd) == 3)
-//         bi_pwd(data, cmd, fds->output, fds);
-// }
-
-// char	*get_cmd_path(t_data *data, t_cmd_list *cmd, t_fd *fds, char **envp)
-// {
-//     if (ft_strchr(cmd->cmd, '/') != NULL)
-//     {
-//         if (is_dir(cmd->cmd))
-//         {
-//             ft_putstr_fd(cmd->cmd, STDOUT_FILENO);
-//             ft_putstr_fd(": Is a directory\n", STDOUT_FILENO);
-//             data->excode = 126;
-//             free_envp(envp);
-//             close_all_fds(fds);
-//             exit;
-//         }
-//         else if (access(cmd->cmd, F_OK | X_OK) == 0)
-//             return (ft_strdup(cmd->cmd));
-//     }
-//     else
-//     {
-//         data->excode = 126;
-//         return (find_cmd_path(cmd->cmd));
-//     }
-//     return (NULL);
-// }
-
 void	free_envp(char **envp)
 {
 	int	i;
@@ -103,38 +13,50 @@ void	free_envp(char **envp)
 	free(envp);
 }
 
-void	execute_child(t_data *data, t_cmd_list *cmd, t_fd *fds)
+// Fonction pour exécuter la commande
+void	exec_cmd(t_data *data, t_cmd_list *cmd, char **envp)
 {
-	if (fds->pipes[0] != -2)
-		close(fds->pipes[0]);
-	if (fds->input != -2)
-		if (dup2(fds->input, STDIN_FILENO) == -1)
-			(close_all_fds(fds), exit_free(data));
-	if (fds->output != -2)
-		if (dup2(fds->output, STDOUT_FILENO) == -1)
-			(close_all_fds(fds), exit_free(data));
-	close_all_fds(fds);
-	exec_cmd(data, cmd, NULL); // Exécution de la commande
-}
-
-void	ft_free_split(char **split)
-{
-	int	i;
-
-	i = 0;
-	while (split[i])
+	if (!cmd || !cmd->cmd)
+		return ;
+	envp = env_to_array(data->env);
+	if (!cmd || !cmd->cmd || cmd->cmd[0] == '\0')
 	{
-		free(split[i]);
-		i++;
+		free_envp(envp);
+		data->excode = 1;
+		exit_free(data);
 	}
-	free(split);
+	cmd->cmd_path = get_env_exec(data->env, cmd->cmd);
+	if (execve(cmd->cmd_path, cmd->args, envp) == -1)
+	{
+		free_envp(envp);
+		error_msg(NO_CMD, cmd->cmd);
+		data->excode = 127;
+		exit_free(data);
+	}
 }
 
-char	*strjoin_free(char *s1, char *s2)
+int	is_builtin_command(t_data *data, t_cmd_list *cmd)
 {
-	char *new_str;
-
-	new_str = ft_strjoin(s1, s2);
-	free(s1);
-	return (new_str);
+	if (ft_strncmp(cmd->cmd, "exit\0", 5) == 0 && data->cmd_list == cmd
+		&& !cmd->next)
+	{
+		ft_exit(data, cmd);
+		return (1);
+	}
+	if (ft_strncmp(cmd->cmd, "cd\0", 3) == 0)
+	{
+		ft_cd(cmd, data);
+		return (1);
+	}
+	if (ft_strncmp(cmd->cmd, "unset\0", 6) == 0)
+	{
+		ft_unset(cmd, data->env);
+		return (1);
+	}
+	if (ft_strncmp(cmd->cmd, "export\0", 7) == 0 && cmd->args[1])
+	{
+		ft_export(cmd, data);
+		return (1);
+	}
+	return (0);
 }
