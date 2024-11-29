@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 07:47:08 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/29 10:34:19 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/11/29 10:02:34 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ int	atoi_check(char *str)
 	long	res;
 
 	i = 0;
-	while (str[i] && (str[i] == '+' || str[i] == '-'))
+	res = 0;
+	if (str[i] == '-' || str[i] == '+')
 		i++;
 	while (str[i])
 	{
@@ -34,9 +35,6 @@ int	atoi_check(char *str)
 
 int	ft_exit(t_data *data, t_cmd_list *cmd)
 {
-	int	exit_status;
-
-	exit_status = 0;
 	if (cmd->args[1])
 	{
 		if (cmd->args[2])
@@ -45,13 +43,13 @@ int	ft_exit(t_data *data, t_cmd_list *cmd)
 		if (!atoi_check(cmd->args[1]))
 		{
 			error_msg("exit", "numeric argument required");
-			exit_status = 2;
+			data->excode = 2;
 		}
 		else
-			exit_status = ft_atoi(cmd->args[1]);
+			data->excode = ft_atoi(cmd->args[1]);
 	}
 	free_cmd_list(data->cmd_list);
 	free_env(data->env);
 	free(data->line);
-	exit(exit_status);
+	exit(data->excode);
 }
