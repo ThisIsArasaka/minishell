@@ -6,7 +6,7 @@
 /*   By: marida-c <marida-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 19:15:38 by olardeux          #+#    #+#             */
-/*   Updated: 2024/12/02 15:12:40 by marida-c         ###   ########.fr       */
+/*   Updated: 2024/12/02 16:34:25 by marida-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	add_special_char(char *line, t_parsing *parsing)
 			return (0);
 		(parsing->token_count)++;
 	}
-	if (is_special_char(line[parsing->i + 1]) && line)
+	if (is_special_char(line[parsing->i + 1]) && line[parsing->i] != '|')
 	{
 		parsing->tokens = add_token(parsing, line + parsing->i, 2);
 		if (!parsing->tokens)
