@@ -6,7 +6,7 @@
 /*   By: marida-c <marida-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 15:38:02 by olardeux          #+#    #+#             */
-/*   Updated: 2024/12/02 12:11:57 by marida-c         ###   ########.fr       */
+/*   Updated: 2024/12/02 14:34:13 by marida-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,9 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_data	data;
 
-	((void)argc, (void)argv);
+	if (argc != 1)
+		return (0);
+	(void)argv;
 	(init_data(&data), init_sig());
 	data.env = init_env(envp);
 	rl_initialize();
@@ -66,10 +68,7 @@ int	main(int argc, char **argv, char **envp)
 			add_history(data.line);
 			data.cmd_list = parsing(&data);
 			if (data.cmd_list)
-			{
-				exec(&data);
-				free_cmd_list(data.cmd_list);
-			}
+				(exec(&data), free_cmd_list(data.cmd_list));
 			free(data.line);
 		}
 	}
