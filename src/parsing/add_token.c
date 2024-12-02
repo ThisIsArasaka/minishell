@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   add_token.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marida-c <marida-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/10 19:15:38 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/11 11:59:01 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/12/02 15:12:40 by marida-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	add_special_char(char *line, t_parsing *parsing)
 			return (0);
 		(parsing->token_count)++;
 	}
-	if (is_special_char(line[parsing->i + 1]))
+	if (is_special_char(line[parsing->i + 1]) && line)
 	{
 		parsing->tokens = add_token(parsing, line + parsing->i, 2);
 		if (!parsing->tokens)

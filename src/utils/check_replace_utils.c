@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_replace_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marida-c <marida-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 12:50:48 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/25 07:03:52 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/12/02 15:24:00 by marida-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ void	skip_var_name(char *line, int *i)
 {
 	while (line[*i] && !ft_isblank(line[*i]) && !is_special_char(line[*i])
 		&& line[*i] != '"' && line[*i] != '\\' && line[*i] != '$'
-		&& line[*i] != '=' && line[*i] != '/' && line[*i - 1] != '?')
+		&& line[*i] != '=' && line[*i] != '/' && line[*i - 1] != '?'
+		&& line[*i] != '\'')
 		(*i)++;
 }
