@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 22:12:38 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/29 11:05:18 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/12/02 11:11:26 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,12 +75,12 @@ int	ft_cd(t_cmd_list *cmd, t_data *data)
 		return (data->excode = 1, error_msg("cd", "too many arguments"), 1);
 	path = set_path(cmd, data->env);
 	if (!path)
-		return (1);
+		return (data->excode = 1, 1);
 	if (chdir(path) == -1)
 	{
 		free(path);
 		data->excode = 1;
-		return (error_msg(CD_ERROR, NULL), 1);
+		return (perror(CD_ERROR), 1);
 	}
 	update_pwd(data->env);
 	free(path);

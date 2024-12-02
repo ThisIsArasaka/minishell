@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mrn <mrn@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 15:37:52 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/29 18:58:54 by mrn              ###   ########.fr       */
+/*   Updated: 2024/12/02 11:11:12 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@
 # define NO_CMD "command not found"
 # define ENV_INIT_FAIL "env initialization failed"
 # define HOME_NOT_SET "HOME not set"
-# define CD_ERROR "cd : no such file or directory"
+# define CD_ERROR "minishell: cd"
 # define EXPORT_ERROR "export : not a valid identifier"
 
 # ifndef FILE_READ_BUFFER_SIZE

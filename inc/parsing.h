@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 22:37:10 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/28 06:20:26 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/12/02 10:58:24 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,12 @@ typedef struct s_data		t_data;
 enum						e_token
 {
 	WORD,
-	INPUT,   // <
-	OUTPUT,  // >
-	APPEND,  // >>
-	HEREDOC, // <<
-	PIPE,    // |
-	ERROR    // error
+	INPUT,
+	OUTPUT,
+	APPEND,
+	HEREDOC,
+	PIPE,
+	ERROR
 };
 
 typedef struct s_token
@@ -39,6 +39,8 @@ typedef struct s_token
 typedef struct s_parsing
 {
 	int						i;
+	int						j;
+	char					*line;
 	int						args_count;
 	int						token_start;
 	int						token_count;
