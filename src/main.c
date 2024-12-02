@@ -6,7 +6,7 @@
 /*   By: marida-c <marida-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 15:38:02 by olardeux          #+#    #+#             */
-/*   Updated: 2024/12/02 14:34:13 by marida-c         ###   ########.fr       */
+/*   Updated: 2024/12/02 14:46:53 by marida-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	main(int argc, char **argv, char **envp)
 	t_data	data;
 
 	if (argc != 1)
-		return (0);
+		return (error_msg(NO_FILE, argv[1]), 1);
 	(void)argv;
 	(init_data(&data), init_sig());
 	data.env = init_env(envp);
