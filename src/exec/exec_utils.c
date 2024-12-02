@@ -6,7 +6,7 @@
 /*   By: marida-c <marida-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 12:29:42 by marida-c          #+#    #+#             */
-/*   Updated: 2024/12/02 12:29:45 by marida-c         ###   ########.fr       */
+/*   Updated: 2024/12/02 15:47:11 by marida-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	is_builtin_command(t_data *data, t_cmd_list *cmd)
 	}
 	if (ft_strncmp(cmd->cmd, "unset\0", 6) == 0)
 	{
-		ft_unset(cmd, data->env);
+		ft_unset(cmd, &data->env);
 		return (1);
 	}
 	if (ft_strncmp(cmd->cmd, "export\0", 7) == 0 && cmd->args[1])

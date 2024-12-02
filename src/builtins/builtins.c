@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mrn <mrn@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: marida-c <marida-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 08:05:54 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/29 19:00:08 by mrn              ###   ########.fr       */
+/*   Updated: 2024/12/02 15:46:53 by marida-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	builtin(t_data *data, t_cmd_list *cmd)
 	else if (!ft_strncmp(cmd->cmd, "export\0", 7))
 		return (ft_export(cmd, data));
 	else if (!ft_strncmp(cmd->cmd, "unset\0", 6))
-		return (ft_unset(cmd, data->env));
+		return (ft_unset(cmd, &data->env));
 	else if (!ft_strncmp(cmd->cmd, "cd\0", 3))
 		return (ft_cd(cmd, data));
 	else if (!ft_strncmp(cmd->cmd, "pwd\0", 4))

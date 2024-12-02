@@ -6,7 +6,7 @@
 /*   By: marida-c <marida-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 15:37:52 by olardeux          #+#    #+#             */
-/*   Updated: 2024/12/02 12:35:56 by marida-c         ###   ########.fr       */
+/*   Updated: 2024/12/02 15:43:27 by marida-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ int			ft_echo(t_cmd_list *cmd);
 int			ft_pwd(t_data *data, t_cmd_list *cmd);
 int			ft_exit(t_data *data, t_cmd_list *cmd);
 int			ft_export(t_cmd_list *cmd, t_data *data);
-int			ft_unset(t_cmd_list *cmd, t_env *env);
+int			ft_unset(t_cmd_list *cmd, t_env **env);
 int			ft_env(t_env *env);
 int			ft_cd(t_cmd_list *cmd, t_data *data);
 

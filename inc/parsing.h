@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marida-c <marida-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 22:37:10 by olardeux          #+#    #+#             */
-/*   Updated: 2024/12/02 10:58:24 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/12/02 16:22:32 by marida-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ t_cmd_list					*parsing(t_data *data);
 int							init_cmd_list(t_cmd_list **cmd_list,
 								t_token *tokens);
 int							get_command(t_cmd_list *cmd, t_parsing *parsing,
-								t_token *start);
+								t_token **start);
 int							detect_token(t_cmd_list *cmd, t_parsing *parsing,
 								t_token **start, int *j);
 int							set_redir(t_redir *redir, t_cmd_list *cmd,

@@ -6,7 +6,7 @@
 /*   By: marida-c <marida-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 15:38:02 by olardeux          #+#    #+#             */
-/*   Updated: 2024/12/02 14:46:53 by marida-c         ###   ########.fr       */
+/*   Updated: 2024/12/02 16:25:07 by marida-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,31 +14,31 @@
 
 int		g_sig = 0;
 
-void	print_cmd_list(t_cmd_list *cmd_list)
-{
-	t_cmd_list	*tmp;
-	t_redir		*redir;
-	int			i;
+// void	print_cmd_list(t_cmd_list *cmd_list)
+// {
+// 	t_cmd_list	*tmp;
+// 	t_redir		*redir;
+// 	int			i;
 
-	tmp = cmd_list;
-	while (tmp)
-	{
-		printf("cmd: %s\n", tmp->cmd);
-		i = 0;
-		redir = tmp->redir;
-		while (redir)
-		{
-			printf("type = %d redir: %s\n", redir->type, redir->file);
-			redir = redir->next;
-		}
-		while (tmp->args[i])
-		{
-			printf("args[%d]: %s\n", i, tmp->args[i]);
-			i++;
-		}
-		tmp = tmp->next;
-	}
-}
+// 	tmp = cmd_list;
+// 	while (tmp)
+// 	{
+// 		printf("cmd: %s\n", tmp->cmd);
+// 		i = 0;
+// 		redir = tmp->redir;
+// 		while (redir)
+// 		{
+// 			printf("type = %d redir: %s\n", redir->type, redir->file);
+// 			redir = redir->next;
+// 		}
+// 		while (tmp->args[i])
+// 		{
+// 			printf("args[%d]: %s\n", i, tmp->args[i]);
+// 			i++;
+// 		}
+// 		tmp = tmp->next;
+// 	}
+// }
 
 void	init_data(t_data *data)
 {

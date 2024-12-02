@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marida-c <marida-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 06:29:34 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/20 10:51:49 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/12/02 16:23:37 by marida-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,27 +32,27 @@ int	init_cmd_list(t_cmd_list **cmd_list, t_token *tokens)
 	return (1);
 }
 
-int	get_command(t_cmd_list *cmd, t_parsing *parsing, t_token *start)
+int	get_command(t_cmd_list *cmd, t_parsing *parsing, t_token **start)
 {
-	if (start->type == PIPE)
+	if ((*start)->type == PIPE)
 		return (error_msg(SYNTAX_ERROR, 0), 0);
-	else if (start->type == INPUT || start->type == OUTPUT
-		|| start->type == APPEND || start->type == HEREDOC)
+	else if ((*start)->type == INPUT || (*start)->type == OUTPUT
+		|| (*start)->type == APPEND || (*start)->type == HEREDOC)
 	{
-		if (start->token[0] == '>')
+		if ((*start)->token[0] == '>')
 		{
-			if (!redirect_output(cmd, parsing, &start))
+			if (!redirect_output(cmd, parsing, start))
 				return (0);
 		}
-		else if (start->token[0] == '<')
+		else if ((*start)->token[0] == '<')
 		{
-			if (!redirect_input(cmd, parsing, &start))
+			if (!redirect_input(cmd, parsing, start))
 				return (0);
 		}
 	}
 	else
 	{
-		cmd->cmd = ft_strdup(start->token);
+		cmd->cmd = ft_strdup((*start)->token);
 		if (!cmd->cmd)
 			return (error_msg(MALLOC_ERROR, NULL), 0);
 		parsing->i++;
