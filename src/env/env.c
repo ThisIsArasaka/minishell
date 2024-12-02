@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 03:22:11 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/29 11:31:53 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/12/02 11:44:24 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ char	*get_env_value(t_env *env, char *name)
 	i = 0;
 	tmp = env;
 	while (name[i] && !ft_isblank(name[i]) && !is_special_char(name[i])
-		&& name[i] != '"' && name[i] != '\\' && name[i] != '$' && name[i] != '='
+		&& name[i] != '"' && name[i] != '\\'
+		&& name[i] != '$' && name[i] != '='
 		&& name[i] != '/' && name[i] != '.' && name[i] != '\''
 		&& !is_special_char(name[i]))
 		i++;
