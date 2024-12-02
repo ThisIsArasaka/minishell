@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marida-c <marida-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/01 15:37:52 by olardeux          #+#    #+#             */
-/*   Updated: 2024/12/02 11:11:12 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/12/02 12:35:56 by marida-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,21 @@ int			ft_cd(t_cmd_list *cmd, t_data *data);
 int			name_match(char *name, char *arg);
 
 /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+				ENV
+ *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
+
+// env_init.c
+t_env		*init_env(char **envp);
+int			add_to_array(char **array, t_env *env, int i);
+char		**env_to_array(t_env *env);
+
+// env.c
+t_env		*param_env(char *env);
+char		*get_env_value(t_env *env, char *name);
+char		*add_cmd_path(char *path, char *cmd);
+char		*get_env_exec(t_env *env, char *name);
+
+/*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 				EXEC
  *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 
@@ -155,21 +170,6 @@ void		apply_redirections(t_cmd_list *cmd, int *fd_in, int *fd_out,
 				t_data *data);
 int			handle_input_redir(t_redir *redir, int fd_in, t_data *data);
 int			handle_output_redir(t_redir *redir, int fd_out, t_data *data);
-
-/*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
-				ENV
- *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
-
-// env_init.c
-t_env		*init_env(char **envp);
-int			add_to_array(char **array, t_env *env, int i);
-char		**env_to_array(t_env *env);
-
-// env.c
-t_env		*param_env(char *env);
-char		*get_env_value(t_env *env, char *name);
-char		*add_cmd_path(char *path, char *cmd);
-char		*get_env_exec(t_env *env, char *name);
 
 // utils
 
