@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/03 11:02:22 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/16 15:41:32 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/12/03 03:22:14 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,7 @@ void	skip_quote(char *line, int *i)
 	int		quote_count;
 
 	quote = line[*i];
-	quote_count = 0;
-	while (line[*i] && line[*i] == quote)
-	{
-		quote_count++;
-		(*i)++;
-	}
+	quote_count = quote_count_init(line, i);
 	while (line[*i] && quote_count > 0)
 	{
 		if (line[*i] == quote)
