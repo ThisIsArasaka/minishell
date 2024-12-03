@@ -6,11 +6,79 @@
 /*   By: marida-c <marida-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 12:29:42 by marida-c          #+#    #+#             */
-/*   Updated: 2024/12/02 15:47:11 by marida-c         ###   ########.fr       */
+/*   Updated: 2024/12/03 14:05:22 by marida-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+// void	handle_exec_error(t_data *data, t_cmd_list *cmd, char **envp)
+// {
+// 	struct stat	statbuf;
+
+// 	if (stat(cmd->cmd_path, &statbuf) == 0) // Fichier ou répertoire existe
+// 	{
+// 		if (S_ISDIR(statbuf.st_mode))
+// 		{
+// 			if (ft_strchr(cmd->cmd_path, '/'))
+// 			{
+// 				error_msg("Is a directory", cmd->cmd);
+// 				data->excode = 126;
+// 			}
+// 			else
+// 			{
+// 				error_msg(NO_CMD, cmd->cmd);
+// 				data->excode = 127;
+// 			}
+// 		}
+// 		else if (access(cmd->cmd_path, X_OK) == -1)
+// 		{
+// 			error_msg(NO_PERM, cmd->cmd);
+// 			data->excode = 126;
+// 		}
+// 		else if (!S_ISREG(statbuf.st_mode))
+// 		{
+// 			if (S_ISREG(statbuf.st_mode))
+// 			{
+// 				error_msg(NO_CMD, cmd->cmd);
+// 				data->excode = 127;
+// 			}
+// 			else
+// 			{
+// 				error_msg(NO_PERM, cmd->cmd);
+// 				data->excode = 127;
+// 			}
+// 		}
+// 		else
+// 		{
+// 			error_msg(NO_FILE, cmd->cmd);
+// 			data->excode = 127;
+// 		}
+// 	}
+// 	else //Commande introuvable ou chemin invalide
+// 	{
+// 		if (errno == ENOENT)
+// 		{
+// 			if (ft_strchr(cmd->cmd_path, '/'))
+// 			{
+// 				error_msg(NO_FILE, cmd->cmd);
+// 				data->excode = 127;
+// 			}
+// 			else
+// 			{
+// 				error_msg(NO_CMD, cmd->cmd);
+// 				data->excode = 127;
+// 			}
+// 		}
+// 		else
+// 		{
+// 			error_msg(NO_FILE, cmd->cmd);
+// 			data->excode = 127;
+// 		}
+// 	}
+// 	free_envp(envp);
+// 	exit_free(data);
+// }
 
 void	free_envp(char **envp)
 {
@@ -38,13 +106,15 @@ void	exec_cmd(t_data *data, t_cmd_list *cmd, char **envp)
 		exit_free(data);
 	}
 	cmd->cmd_path = get_env_exec(data->env, cmd->cmd);
-	if (execve(cmd->cmd_path, cmd->args, envp) == -1)
+		if (execve(cmd->cmd_path, cmd->args, envp) == -1)
 	{
+		// handle_exec_error(data, cmd, envp);
 		free_envp(envp);
 		error_msg(NO_CMD, cmd->cmd);
 		data->excode = 127;
 		exit_free(data);
 	}
+		
 }
 
 int	is_builtin_command(t_data *data, t_cmd_list *cmd)

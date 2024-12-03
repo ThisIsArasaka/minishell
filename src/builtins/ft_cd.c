@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marida-c <marida-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 22:12:38 by olardeux          #+#    #+#             */
-/*   Updated: 2024/12/03 03:48:53 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/12/03 13:32:15 by marida-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ int	ft_cd(t_cmd_list *cmd, t_data *data)
 	char	*path;
 
 	if (cmd->args[1] && cmd->args[2])
-		return (data->excode = 1, error_msg("cd", "too many arguments"), 1);
+		return (data->excode = 1, error_msg("too many arguments", "cd"), 1);
 	if (!data->env)
 		data->env = create_pwd(data->env);
 	path = set_path(cmd, data->env);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marida-c <marida-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 09:47:17 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/28 10:59:36 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/12/03 13:25:51 by marida-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,12 @@
 
 void	error_msg(char *msg, char *arg)
 {
-	if (!arg)
+	ft_putstr_fd("minishell: ", STDERR_FILENO);
+	if (arg)
 	{
-		ft_putstr_fd("minishell: ", STDERR_FILENO);
-		ft_putendl_fd(msg, STDERR_FILENO);
-	}
-	else
-	{
-		ft_putstr_fd("minishell: ", STDERR_FILENO);
-		ft_putstr_fd(msg, STDERR_FILENO);
+		ft_putstr_fd(arg, STDERR_FILENO);
 		ft_putstr_fd(": ", STDERR_FILENO);
-		ft_putendl_fd(arg, STDERR_FILENO);
 	}
+	ft_putstr_fd(msg, STDERR_FILENO);
+	ft_putstr_fd("\n", STDERR_FILENO);
 }

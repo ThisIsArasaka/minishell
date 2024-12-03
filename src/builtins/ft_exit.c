@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marida-c <marida-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 07:47:08 by olardeux          #+#    #+#             */
-/*   Updated: 2024/11/29 10:02:34 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/12/03 13:32:50 by marida-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,11 @@ int	ft_exit(t_data *data, t_cmd_list *cmd)
 	if (cmd->args[1])
 	{
 		if (cmd->args[2])
-			return (error_msg("exit", "too many arguments"), data->excode = 1,
+			return (error_msg("too many arguments", "exit"), data->excode = 1,
 				1);
 		if (!atoi_check(cmd->args[1]))
 		{
-			error_msg("exit", "numeric argument required");
+			error_msg("numeric argument required", "exit");
 			data->excode = 2;
 		}
 		else
