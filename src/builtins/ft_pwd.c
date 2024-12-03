@@ -6,7 +6,7 @@
 /*   By: olardeux <olardeux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 08:13:16 by olardeux          #+#    #+#             */
-/*   Updated: 2024/12/02 11:13:16 by olardeux         ###   ########.fr       */
+/*   Updated: 2024/12/03 12:46:21 by olardeux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ int	ft_pwd(t_data *data, t_cmd_list *cmd)
 {
 	char	*pwd;
 
-	if (cmd->args[1] && cmd->args[2])
-		return (data->excode = 1, error_msg("pwd", "too many arguments"), 1);
+	(void)data;
+	(void)cmd;
 	pwd = getcwd(NULL, 0);
 	if (!pwd)
 		return (error_msg(NO_FILE, NULL), 0);
