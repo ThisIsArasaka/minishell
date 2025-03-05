@@ -31,7 +31,7 @@ Minishell implements the following features:
 To install Minishell, clone the repository and compile the project:
 
 
-git clone https://github.com/your-username/minishell.git
+git clone git@github.com:ThisIsArasaka/minishell.git
 
 cd minishell
 
