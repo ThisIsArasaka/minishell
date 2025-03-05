@@ -30,15 +30,20 @@ Minishell implements the following features:
 
 To install Minishell, clone the repository and compile the project:
 
-
+```sh
 git clone git@github.com/ThisIsArasaka/minishell.git
-
+```
+```sh
 cd minishell
-
+```
+```sh
 make
+```
 
 ## Usage
 
 To launch Minishell, run the following command in your terminal:
 
+```sh
 ./minishell
+```
